@@ -1,4 +1,29 @@
-h3{
-    color:blue;
-    line-height:1.5;
+/* .title {
+    color: black;
+    line-height: 1.5;
+    text-align: center;
+}
+
+body {
+    background-color: gainsboro;
+} */
+
+.btn-flat-border {
+    display: inline-block;
+    padding: 0.3em 1em;
+    text-decoration: none;
+    color: #67c5ff;
+    border: solid 2px #67c5ff;
+    border-radius: 3px;
+    transition: .4s;
+    margin: 0.3%
+}
+
+.btn-flat-border:hover {
+    background: #67c5ff;
+    color: white;
+}
+
+.searchbox {
+    width: 50%
 }
