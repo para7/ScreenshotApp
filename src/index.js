@@ -31,48 +31,54 @@ data.push(new ImageData("本当ですか!?ありがとうございます!これ�
 // tags = [];
 // data.push(new ImageData("きっとこの衣装は、魔法図書館に入る鍵なんです。",[], "写真 2018-12-05 9 23 40.png"));
 
-console.log(data);
+// 画像クリック時の処理
+function SetClipboard() {
 
-let images = document.getElementById("images");
+    console.log(event.currentTarget);
 
-function SetClipboard(filepath) {
+    // let filepath = event.target.src;
 
-    let reg = /(.*)(?:\.([^.]+$))/;
-    let extension = filepath.match(reg)[2];
+    // let reg = /(.*)(?:\.([^.]+$))/;
+    // let extension = filepath.match(reg)[2];
 
-    const electron = require('electron');
-    const nativeImage = electron.nativeImage;
-    let image = nativeImage.createFromPath(filepath);
+    // const electron = require('electron');
+    // const nativeImage = electron.nativeImage;
+    // let image = nativeImage.createFromPath(filepath);
 
-    const clipboard = electron.clipboard;
-    clipboard.writeImage(image);
+    // const clipboard = electron.clipboard;
+    // clipboard.writeImage(image);
 
-    console.log(image);
+    // console.log(image);
 
-    splash('コピーしました');
+    // splash('コピーしました');
 }
 
 // 検索
 let button = document.getElementById("search");
+
 button.addEventListener('click', function() {
 
+    let images = document.getElementById("images");
     let input = document.getElementById("searchinput");
 
     console.log(input);
     let searchword = input.value;
 
     //clean result
-    images.textContent = "";
+    //images.textContent = "";
 
     for (let i = 0, l = data.length; i < l; ++i) {
         if (data[i].text.search(searchword) != -1) {
-            //add Image
-            let onclick = 'onclick=\"SetClipboard(\'' + data[i].filepath + '\')\"';
-            console.log(onclick);
-            let hoge = '<img src=\"' + data[i].filepath + '\" ' + onclick + 'width=500 /> <br>';
-            console.log(hoge);
-            images.insertAdjacentHTML('beforeend', hoge);
 
+            let imgbt = document.createElement('img');
+            console.log(imgbt);
+            imgbt.src = data[i].filepath;
+            imgbt.width = 500;
+
+            images.insertAdjacentElement('beforeend', imgbt);
+            imgbt.addEventListener('click', SetClipboard(), true);
+            console.log(imgbt);
+            images.insertAdjacentHTML('beforeend', '<br>');
         }
     }
 })
