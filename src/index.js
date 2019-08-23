@@ -61,19 +61,18 @@ button.addEventListener('click', function() {
     console.log(input);
     let searchword = input.value;
 
+    //clean result
     images.textContent = "";
 
     for (let i = 0, l = data.length; i < l; ++i) {
         if (data[i].text.search(searchword) != -1) {
-            // Image
+            //add Image
             let onclick = 'onclick=\"SetClipboard(\'' + data[i].filepath + '\')\"';
             console.log(onclick);
             let hoge = '<img src=\"' + data[i].filepath + '\" ' + onclick + 'width=500 /> <br>';
             console.log(hoge);
             images.insertAdjacentHTML('beforeend', hoge);
 
-            // Button
-            let bt = '<button id="copy">コピー</button>';
         }
     }
 })

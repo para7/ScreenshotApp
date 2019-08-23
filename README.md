@@ -1,3 +1,10 @@
 # ScreenshotApp(仮)
 
-Twitterのリプに使うスクショをさっと探すためのアプリ
+Twitterなどのリプに使うスクショをさっと探すためのアプリケーション  
+
+# Language
+
+JavaScript(node.js)
+
+## npm package
+electron@6.0.3
