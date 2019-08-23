@@ -34,23 +34,18 @@ data.push(new ImageData("本当ですか!?ありがとうございます!これ�
 // 画像クリック時の処理
 function SetClipboard() {
 
-    console.log(event.currentTarget);
+    let filepath = decodeURI(event.target.src);
+    filepath = filepath.substr(7);
+    console.log(filepath);
 
-    // let filepath = event.target.src;
+    const electron = require('electron');
+    const nativeImage = electron.nativeImage;
+    let image = nativeImage.createFromPath(filepath);
 
-    // let reg = /(.*)(?:\.([^.]+$))/;
-    // let extension = filepath.match(reg)[2];
+    const clipboard = electron.clipboard;
+    clipboard.writeImage(image);
 
-    // const electron = require('electron');
-    // const nativeImage = electron.nativeImage;
-    // let image = nativeImage.createFromPath(filepath);
-
-    // const clipboard = electron.clipboard;
-    // clipboard.writeImage(image);
-
-    // console.log(image);
-
-    // splash('コピーしました');
+    splash('コピーしました');
 }
 
 // 検索
@@ -58,26 +53,22 @@ let button = document.getElementById("search");
 
 button.addEventListener('click', function() {
 
-    let images = document.getElementById("images");
     let input = document.getElementById("searchinput");
-
-    console.log(input);
     let searchword = input.value;
 
+    let images = document.getElementById("images");
     //clean result
     //images.textContent = "";
 
     for (let i = 0, l = data.length; i < l; ++i) {
         if (data[i].text.search(searchword) != -1) {
-
+            console.log(data[i].filepath);
             let imgbt = document.createElement('img');
-            console.log(imgbt);
             imgbt.src = data[i].filepath;
             imgbt.width = 500;
+            imgbt.addEventListener('click', SetClipboard, true);
 
             images.insertAdjacentElement('beforeend', imgbt);
-            imgbt.addEventListener('click', SetClipboard(), true);
-            console.log(imgbt);
             images.insertAdjacentHTML('beforeend', '<br>');
         }
     }
