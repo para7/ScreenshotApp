@@ -31,14 +31,12 @@ data.push(new ImageData("本当ですか!?ありがとうございます!これ�
 // tags = [];
 // data.push(new ImageData("きっとこの衣装は、魔法図書館に入る鍵なんです。",[], "写真 2018-12-05 9 23 40.png"));
 
-console.log(data);
+// 画像クリック時の処理
+function SetClipboard() {
 
-let images = document.getElementById("images");
-
-function SetClipboard(filepath) {
-
-    let reg = /(.*)(?:\.([^.]+$))/;
-    let extension = filepath.match(reg)[2];
+    let filepath = decodeURI(event.target.src);
+    filepath = filepath.substr(7);
+    console.log(filepath);
 
     const electron = require('electron');
     const nativeImage = electron.nativeImage;
@@ -47,32 +45,31 @@ function SetClipboard(filepath) {
     const clipboard = electron.clipboard;
     clipboard.writeImage(image);
 
-    console.log(image);
-
     splash('コピーしました');
 }
 
 // 検索
 let button = document.getElementById("search");
+
 button.addEventListener('click', function() {
 
     let input = document.getElementById("searchinput");
-
-    console.log(input);
     let searchword = input.value;
 
+    let images = document.getElementById("images");
     //clean result
-    images.textContent = "";
+    //images.textContent = "";
 
     for (let i = 0, l = data.length; i < l; ++i) {
         if (data[i].text.search(searchword) != -1) {
-            //add Image
-            let onclick = 'onclick=\"SetClipboard(\'' + data[i].filepath + '\')\"';
-            console.log(onclick);
-            let hoge = '<img src=\"' + data[i].filepath + '\" ' + onclick + 'width=500 /> <br>';
-            console.log(hoge);
-            images.insertAdjacentHTML('beforeend', hoge);
+            console.log(data[i].filepath);
+            let imgbt = document.createElement('img');
+            imgbt.src = data[i].filepath;
+            imgbt.width = 500;
+            imgbt.addEventListener('click', SetClipboard, true);
 
+            images.insertAdjacentElement('beforeend', imgbt);
+            images.insertAdjacentHTML('beforeend', '<br>');
         }
     }
 })
