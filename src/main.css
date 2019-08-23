@@ -1,12 +1,12 @@
-/* .title {
+.title {
     color: black;
     line-height: 1.5;
     text-align: center;
 }
 
 body {
-    background-color: gainsboro;
-} */
+    background-color: #F5F5F5
+}
 
 .btn-flat-border {
     display: inline-block;

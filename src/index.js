@@ -48,6 +48,8 @@ function SetClipboard(filepath) {
     clipboard.writeImage(image);
 
     console.log(image);
+
+    splash('コピーしました');
 }
 
 // 検索
@@ -62,11 +64,11 @@ button.addEventListener('click', function() {
     images.textContent = "";
 
     for (let i = 0, l = data.length; i < l; ++i) {
-        if (data[i].text.indexOf(searchword) != -1) {
+        if (data[i].text.search(searchword) != -1) {
             // Image
             let onclick = 'onclick=\"SetClipboard(\'' + data[i].filepath + '\')\"';
             console.log(onclick);
-            let hoge = '<img src=\"' + data[i].filepath + '\" ' + onclick + 'width=600 />';
+            let hoge = '<img src=\"' + data[i].filepath + '\" ' + onclick + 'width=500 /> <br>';
             console.log(hoge);
             images.insertAdjacentHTML('beforeend', hoge);
 
