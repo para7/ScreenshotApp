@@ -17,30 +17,6 @@ class ImageData {
 
 let data = new Array();
 
-function setdata() {
-
-    let imagedata = new ImageData();
-    let tags = ["七尾百合子", "ミリシタ"];
-
-    imagedata.text = "いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？";
-    imagedata.tags = tags;
-    imagedata.filepath = "./imgs/写真 2018-12-17 16 28 32.png";
-    data.push(imagedata);
-
-    imagedata = new ImageData();
-    tags = [];
-    imagedata.text = "きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！";
-    imagedata.tags = tags;
-    imagedata.filepath = "./imgs/写真 2018-12-05 9 23 40.png";
-    data.push(imagedata);
-
-    imagedata = new ImageData();
-    imagedata.text = "本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪";
-    imagedata.tags = tags;
-    imagedata.filepath = "./imgs/写真 2018-11-03 21 25 29.png";
-    data.push(imagedata);
-}
-
 // let tags = ["七尾百合子", "ミリシタ"];
 // let data = [new ImageData("いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？", tags, "./imgs/写真 2018-12-17 16 28 32.png")];
 
@@ -48,29 +24,6 @@ function setdata() {
 // data.push(new ImageData("きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！", [], "./imgs/写真 2018-12-05 9 23 40.png"));
 
 // data.push(new ImageData("本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪", [], "./imgs/写真 2018-11-03 21 25 29.png"));
-
-function readjson() {
-    const fs = require('fs');
-
-    fs.readFile("ScreenshotsInfo.json", 'utf-8', (err, json) => {
-        // 失敗した場合
-        if (err) {
-            console.log("エラーが発生しました。" + err)
-            throw err
-        }
-        // 成功した場合
-        else {
-            console.log("読み込みます");
-            console.log(json);
-
-            data = JSON.parse(json);
-            console.log(data);
-        }
-    });
-};
-
-
-console.log(data);
 
 // 画像クリック時の処理
 function SetClipboard() {
@@ -96,18 +49,32 @@ button.addEventListener('click', function() {
 
     let input = document.getElementById("searchinput");
     let searchword = input.value;
-
     let images = document.getElementById("images");
-    //clean result
-    //images.textContent = "";
+
+    // エラーの挿入
+    if (!searchword) {
+        images.insertAdjacentHTML("afterbegin", "<p class='red'>検索する文字を入力してください<br><\p>");
+        return;
+    }
+
+
+    let children = images.children;
+    // イベントの解除
+    for (let i = 0, l = children.length; i < l; ++i) {
+        children[i].removeEventListener('click', SetClipboard);
+    }
+
+    // 要素のリセット
+    images.textContent = "";
 
     for (let i = 0, l = data.length; i < l; ++i) {
+
         if (data[i].text.search(searchword) != -1) {
-            console.log(data[i].filepath);
+
             let imgbt = document.createElement('img');
             imgbt.src = data[i].filepath;
             imgbt.width = 500;
-            imgbt.addEventListener('click', SetClipboard, true);
+            imgbt.addEventListener('click', SetClipboard);
 
             images.insertAdjacentElement('beforeend', imgbt);
             images.insertAdjacentHTML('beforeend', '<br>');
@@ -115,24 +82,62 @@ button.addEventListener('click', function() {
     }
 })
 
+function setdata() {
+
+    let imagedata = new ImageData();
+    let tags = ["七尾百合子", "ミリシタ"];
+
+    imagedata.text = "いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？";
+    imagedata.tags = tags;
+    imagedata.filepath = "./imgs/写真 2018-12-17 16 28 32.png";
+    data.push(imagedata);
+
+    imagedata = new ImageData();
+    tags = [];
+    imagedata.text = "きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！";
+    imagedata.tags = tags;
+    imagedata.filepath = "./imgs/写真 2018-12-05 9 23 40.png";
+    data.push(imagedata);
+
+    imagedata = new ImageData();
+    imagedata.text = "本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪";
+    imagedata.tags = tags;
+    imagedata.filepath = "./imgs/写真 2018-11-03 21 25 29.png";
+    data.push(imagedata);
+}
+
+function readjson() {
+    const fs = require('fs');
+
+    fs.readFile("ScreenshotsInfo.json", 'utf-8', (err, json) => {
+        // 失敗した場合
+        if (err) {
+            console.log("読み込み中にエラーが発生しました。" + err)
+            throw err
+        }
+        // 成功した場合
+        else {
+            data = JSON.parse(json);
+        }
+    });
+};
+
+
 function savejson() {
 
     const fs = require('fs');
 
     var json = JSON.stringify(data, null);
 
-    console.log(data);
-    console.log(json);
-
     fs.writeFile("ScreenshotsInfo.json", json, (err) => {
         // 書き出しに失敗した場合
         if (err) {
-            console.log("エラーが発生しました。" + err)
+            console.log("書き込み中にエラーが発生しました。" + err)
             throw err
         }
         // 書き出しに成功した場合
         else {
-            console.log("ファイルが正常に書き出しされました")
+            // console.log("ファイルが正常に書き出しされました")
         }
     });
 }

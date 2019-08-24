@@ -27,3 +27,7 @@ body {
 .searchbox {
     width: 50%
 }
+
+p.red {
+    color: red;
+}
