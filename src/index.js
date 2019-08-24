@@ -69,10 +69,12 @@ function searchEvent() {
     // 要素のリセット
     images.textContent = "";
 
+    let empty = true;
     for (let i = 0, l = data.length; i < l; ++i) {
 
+        //ここLINQみたいにかきたかったなぁ
         if (data[i].text.search(searchword) != -1) {
-
+            empty = false;
             let imgbt = document.createElement('img');
             imgbt.src = data[i].filepath;
             imgbt.width = 500;
@@ -82,6 +84,9 @@ function searchEvent() {
             images.insertAdjacentHTML('beforeend', '<br>');
         }
     }
+
+    images.insertAdjacentHTML("afterbegin", "<p class='red'>該当する画像がありませんでした<br><\p>");
+
 }
 
 function onKeyPress(e) {
