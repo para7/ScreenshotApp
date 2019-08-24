@@ -13,7 +13,15 @@ class ImageData {
     // }
 }
 
-let data;
+//let data;
+
+let tags = ["七尾百合子", "ミリシタ"];
+let data = [new ImageData("いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？", tags, "./imgs/写真 2018-12-17 16 28 32.png")];
+
+tags = [];
+data.push(new ImageData("きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！", [], "./imgs/写真 2018-12-05 9 23 40.png"));
+
+data.push(new ImageData("本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪", [], "./imgs/写真 2018-11-03 21 25 29.png"));
 
 // let tags = ["七尾百合子", "ミリシタ"];
 // let data = [new ImageData("いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？", tags, "./imgs/写真 2018-12-17 16 28 32.png")];
@@ -40,7 +48,10 @@ let data;
             console.log(data);
         }
     });
-})();
+});
+
+
+console.log(data);
 
 //let data = new ImageData();
 
@@ -100,6 +111,9 @@ function savejson() {
     const fs = require('fs');
 
     var json = JSON.stringify(data);
+
+    console.log(data);
+    console.log(json);
 
     fs.writeFile("ScreenshotsInfo.json", json, (err) => {
         // 書き出しに失敗した場合
