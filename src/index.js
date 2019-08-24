@@ -45,7 +45,9 @@ function SetClipboard() {
 // 検索
 let button = document.getElementById("search");
 
-button.addEventListener('click', function() {
+// イベントリスナーへの登録
+
+function searchEvent() {
 
     let input = document.getElementById("searchinput");
     let searchword = input.value;
@@ -80,7 +82,17 @@ button.addEventListener('click', function() {
             images.insertAdjacentHTML('beforeend', '<br>');
         }
     }
-})
+}
+
+function onKeyPress(e) {
+    if (e.keyCode == 13) {
+        searchEvent();
+    }
+}
+
+// 検索動作
+button.addEventListener('click', searchEvent);
+document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
 
 function setdata() {
 
