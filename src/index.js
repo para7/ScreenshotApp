@@ -16,12 +16,27 @@ class ImageData {
 //let data;
 
 let tags = ["七尾百合子", "ミリシタ"];
-let data = [new ImageData("いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？", tags, "./imgs/写真 2018-12-17 16 28 32.png")];
+let data = new Array();
 
+let imagedata = new ImageData();
+
+imagedata.text = "いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？";
+imagedata.tags = tags;
+imagedata.filepath = "./imgs/写真 2018-12-17 16 28 32.png";
+data.push(imagedata);
+
+imagedata = new ImageData();
 tags = [];
-data.push(new ImageData("きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！", [], "./imgs/写真 2018-12-05 9 23 40.png"));
+imagedata.text = "きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！";
+imagedata.tags = tags;
+imagedata.filepath = "./imgs/写真 2018-12-05 9 23 40.png";
+data.push(imagedata);
 
-data.push(new ImageData("本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪", [], "./imgs/写真 2018-11-03 21 25 29.png"));
+imagedata = new ImageData();
+imagedata.text = "本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪";
+imagedata.tags = tags;
+imagedata.filepath = "./imgs/写真 2018-11-03 21 25 29.png";
+data.push(imagedata);
 
 // let tags = ["七尾百合子", "ミリシタ"];
 // let data = [new ImageData("いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？", tags, "./imgs/写真 2018-12-17 16 28 32.png")];
@@ -110,7 +125,7 @@ function savejson() {
 
     const fs = require('fs');
 
-    var json = JSON.stringify(data);
+    var json = JSON.stringify(data, null, 4);
 
     console.log(data);
     console.log(json);
