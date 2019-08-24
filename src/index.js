@@ -15,12 +15,12 @@ class ImageData {
 
 //let data;
 
-let tags = ["七尾百合子", "ミリシタ"];
 let data = new Array();
 
-let imagedata = new ImageData();
-
 function setdata() {
+
+    let imagedata = new ImageData();
+    let tags = ["七尾百合子", "ミリシタ"];
 
     imagedata.text = "いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？";
     imagedata.tags = tags;
