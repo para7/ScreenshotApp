@@ -55,7 +55,7 @@ function searchEvent() {
 
     // エラーの挿入
     if (!searchword) {
-        images.insertAdjacentHTML("afterbegin", "<p class='red'>検索する文字を入力してください<br><\p>");
+        images.insertAdjacentHTML("afterbegin", "<div class='red'>検索する文字を入力してください<br></div>");
         return;
     }
 
@@ -85,7 +85,7 @@ function searchEvent() {
         }
     }
 
-    images.insertAdjacentHTML("afterbegin", "<p class='red'>該当する画像がありませんでした<br><\p>");
+    images.insertAdjacentHTML("afterbegin", "<div class='red'>該当する画像がありませんでした<br></div>");
 
 }
 
