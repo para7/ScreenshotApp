@@ -5,12 +5,6 @@ class ImageData {
         this.tags = [];
         this.filepath = "";
     }
-
-    // constructor(text, tags, filepath) {
-    //     this.text = text;
-    //     this.tags = tags;
-    //     this.filepath = filepath;
-    // }
 }
 
 let data = new Array();
@@ -66,8 +60,23 @@ function searchEvent() {
     let empty = true;
     for (let i = 0, l = data.length; i < l; ++i) {
 
-        //ここLINQみたいにかきたかったなぁ
-        if (data[i].text.search(searchword) != -1) {
+        //全文検索
+        let result = data[i].text.search(searchword) != -1;
+
+        //タグ検索
+        if (!result) {
+
+            for (let k = 0, lt = data[i].tags.length; k < lt; ++k) {
+                console.log(data[i].tags[k])
+
+                if (data[i].tags[k] == searchword) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        if (result) {
             empty = false;
             let imgbt = document.createElement('img');
             imgbt.src = data[i].filepath;
@@ -98,24 +107,25 @@ document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
 function setdata() {
 
     let imagedata = new ImageData();
-    let tags = ["七尾百合子", "ミリシタ"];
+    let tags = ["ミリシタ", "七尾百合子"];
+
+    const basepath = "./data/ミリシタ/"
 
     imagedata.text = "いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？";
     imagedata.tags = tags;
-    imagedata.filepath = "./imgs/写真 2018-12-17 16 28 32.png";
+    imagedata.filepath = basepath + "写真 2018-12-17 16 28 32.png";
     data.push(imagedata);
 
     imagedata = new ImageData();
-    tags = [];
     imagedata.text = "きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！";
     imagedata.tags = tags;
-    imagedata.filepath = "./imgs/写真 2018-12-05 9 23 40.png";
+    imagedata.filepath = basepath + "写真 2018-12-05 9 23 40.png";
     data.push(imagedata);
 
     imagedata = new ImageData();
     imagedata.text = "本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪";
     imagedata.tags = tags;
-    imagedata.filepath = "./imgs/写真 2018-11-03 21 25 29.png";
+    imagedata.filepath = basepath + "写真 2018-11-03 21 25 29.png";
     data.push(imagedata);
 }
 
@@ -135,12 +145,11 @@ function readjson() {
     });
 };
 
-
 function savejson() {
 
     const fs = require('fs');
 
-    var json = JSON.stringify(data, null);
+    var json = JSON.stringify(data, null, 2);
 
     fs.writeFile("ScreenshotsInfo.json", json, (err) => {
         // 書き出しに失敗した場合
@@ -150,11 +159,11 @@ function savejson() {
         }
         // 書き出しに成功した場合
         else {
-            // console.log("ファイルが正常に書き出しされました")
+            console.log("ファイルが正常に書き出しされました")
         }
     });
 }
 
-//setdata();
+// setdata();
 readjson();
-//savejson();
+// savejson();
