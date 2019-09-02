@@ -13,17 +13,9 @@ class ImageData {
     // }
 }
 
-//let data;
-
 let data = new Array();
 
-// let tags = ["七尾百合子", "ミリシタ"];
-// let data = [new ImageData("いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？", tags, "./imgs/写真 2018-12-17 16 28 32.png")];
-
-// tags = [];
-// data.push(new ImageData("きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！", [], "./imgs/写真 2018-12-05 9 23 40.png"));
-
-// data.push(new ImageData("本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪", [], "./imgs/写真 2018-11-03 21 25 29.png"));
+const DatabasePath = "./ScreenshotsInfo.json";
 
 // 画像クリック時の処理
 function SetClipboard() {
@@ -67,7 +59,9 @@ function searchEvent() {
     }
 
     // 要素のリセット
-    images.textContent = "";
+    while (images.firstChild) {
+        images.removeChild(images.firstChild);
+    }
 
     let empty = true;
     for (let i = 0, l = data.length; i < l; ++i) {
@@ -85,8 +79,10 @@ function searchEvent() {
         }
     }
 
-    images.insertAdjacentHTML("afterbegin", "<div class='red'>該当する画像がありませんでした<br></div>");
 
+    if (empty) {
+        images.insertAdjacentHTML("afterbegin", "<div class='red'>該当する画像がありませんでした<br></div>");
+    }
 }
 
 function onKeyPress(e) {
@@ -126,7 +122,7 @@ function setdata() {
 function readjson() {
     const fs = require('fs');
 
-    fs.readFile("ScreenshotsInfo.json", 'utf-8', (err, json) => {
+    fs.readFile(DatabasePath, 'utf-8', (err, json) => {
         // 失敗した場合
         if (err) {
             console.log("読み込み中にエラーが発生しました。" + err)
