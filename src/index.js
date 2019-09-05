@@ -90,7 +90,6 @@ function searchEvent() {
         }
     }
 
-
     if (empty) {
         images.insertAdjacentHTML("afterbegin", "<div class='red'>該当する画像がありませんでした<br></div>");
     }
