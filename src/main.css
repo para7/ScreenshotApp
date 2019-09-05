@@ -1,5 +1,7 @@
 .searchbox {
-    width: 40%
+    width: 40%;
+    height: 1.15rem;
+    font-size: 0.95rem;
 }
 
 div.red {
@@ -7,8 +9,4 @@ div.red {
     text-align: center;
     position: relative;
     right: 5%;
-}
-
-.center {
-    text-align: center
 }
