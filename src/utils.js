@@ -14,7 +14,7 @@ function splash(msg, custom_set) {
         trans_in: 'ease-in',
         trans_out: 'ease-out',
         outer_style: 'top: 0px;left: 0px;position: fixed;z-index: 1000;width: 100%;height: 100%;',
-        message_style: 'padding:0.5em;font-size:2.5em;color:white;background-color:gray; position: absolute;top: 50%; left: 50%;transform: translateY(-50%) translateX(-50%);-webkit-transform: translateY(-50%) translateX(-50%);',
+        message_style: 'padding:0.5em;font-size:4em;color:white;background-color:gray; position: absolute;top: 50%; left: 50%;transform: translateY(-50%) translateX(-50%);-webkit-transform: translateY(-50%) translateX(-50%);',
         style_id: 'append_splash_msg_style',
         outer_id: 'append_splash_msg',
         message_id: 'append_splash_msg_inner',
@@ -41,6 +41,8 @@ function splash(msg, custom_set) {
     }
 
     //Element (Outer, Inner)
+
+    var e;
     if ((e = document.getElementById(set.outer_id))) { e.parentNode.removeChild(e); if (set.on_splash_vanished) set.on_splash_vanished(); }
     var splash = document.createElement('div');
     splash.id = set.outer_id;
