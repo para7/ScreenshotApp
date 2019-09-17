@@ -9,7 +9,11 @@ class ImageData {
     }
 }
 
-let data = new Array();
+if (typeof ScreenShotApp === "undefined") {
+    var ScreenShotApp = {};
+}
+
+ScreenShotApp.screenShotsData = new Array();
 
 const DatabasePath = "./ScreenshotsInfo.json";
 
@@ -60,18 +64,18 @@ function searchEvent() {
     }
 
     let empty = true;
-    for (let i = 0, l = data.length; i < l; ++i) {
+    for (let i = 0, l = ScreenShotApp.screenShotsData.length; i < l; ++i) {
 
         //全文検索
-        let result = data[i].text.search(searchword) != -1;
+        let result = ScreenShotApp.screenShotsData[i].text.search(searchword) != -1;
 
         //タグ検索
         if (!result) {
 
-            for (let k = 0, lt = data[i].tags.length; k < lt; ++k) {
-                console.log(data[i].tags[k])
+            for (let k = 0, lt = ScreenShotApp.screenShotsData[i].tags.length; k < lt; ++k) {
+                console.log(ScreenShotApp.screenShotsData[i].tags[k])
 
-                if (data[i].tags[k] == searchword) {
+                if (ScreenShotApp.screenShotsData[i].tags[k] == searchword) {
                     result = true;
                     break;
                 }
@@ -81,7 +85,7 @@ function searchEvent() {
         if (result) {
             empty = false;
             let imgbt = document.createElement('img');
-            imgbt.src = data[i].filepath;
+            imgbt.src = ScreenShotApp.screenShotsData[i].filepath;
             imgbt.width = 500;
             imgbt.addEventListener('click', SetClipboard);
 
@@ -105,6 +109,7 @@ function onKeyPress(e) {
 button.addEventListener('click', searchEvent);
 document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
 
+//仮データのセット
 function setdata() {
 
     let imagedata = new ImageData();
@@ -115,19 +120,19 @@ function setdata() {
     imagedata.text = "いいですか、プロデューサーさん？もし私が何か変なことしてたら注意してくださいね？ねっ？";
     imagedata.tags = tags;
     imagedata.filepath = basepath + "写真 2018-12-17 16 28 32.png";
-    data.push(imagedata);
+    ScreenShotApp.screenShotsData.push(imagedata);
 
     imagedata = new ImageData();
     imagedata.text = "きっとこの衣装は、魔法図書館に入る鍵なんです。扉はこのメガネをかけないと見えなくて…！";
     imagedata.tags = tags;
     imagedata.filepath = basepath + "写真 2018-12-05 9 23 40.png";
-    data.push(imagedata);
+    ScreenShotApp.screenShotsData.push(imagedata);
 
     imagedata = new ImageData();
     imagedata.text = "本当ですか!?ありがとうございます!これで私の人生に、楽しみがひとつ増えますね♪";
     imagedata.tags = tags;
     imagedata.filepath = basepath + "写真 2018-11-03 21 25 29.png";
-    data.push(imagedata);
+    ScreenShotApp.screenShotsData.push(imagedata);
 }
 
 function readjson() {
@@ -141,7 +146,7 @@ function readjson() {
         }
         // 成功した場合
         else {
-            data = JSON.parse(json);
+            ScreenShotApp.screenShotsData = JSON.parse(json);
         }
     });
 };
@@ -150,7 +155,7 @@ function savejson() {
 
     const fs = require('fs');
 
-    var json = JSON.stringify(data, null, 2);
+    var json = JSON.stringify(ScreenShotApp.screenShotsData, null, 2);
 
     fs.writeFile("ScreenshotsInfo.json", json, (err) => {
         // 書き出しに失敗した場合
@@ -160,7 +165,7 @@ function savejson() {
         }
         // 書き出しに成功した場合
         else {
-            console.log("ファイルが正常に書き出しされました")
+            console.log("ファイルが正常に書き出しされました");
         }
     });
 }

@@ -13,8 +13,6 @@
 
 <body>
 
-    <script src="utils.js"></script>
-
     <div class="center">
         <a href="index.html">検索画面に戻る
         </a>
@@ -26,27 +24,32 @@
         <div id="gridleft">
             <div class="center">
                 カテゴリ
-            </div>
-            <!-- <br> -->
-            <input type="text" id="primaryinput" class="taginput">
-            <a href="#" id="search" class="btn-flat-border">追加</a>
-            <div class="primarytags">
+                <br>
+                <input type="text" id="primaryinput" class="taginput">
+                <a href="#" id="primaryadd" class="btn-flat-border">追加</a>
+                <div class="primarytags">
 
+                </div>
             </div>
         </div>
 
         <div id="gridright">
             <div class="center">
                 その他分類タグ
-            </div>
-            <input type="text" id="otherinput" class="taginput">
-            <a href="#" id="search" class="btn-flat-border">追加</a>
-            <div class="othertags">
+                <br>
+                <input type="text" id="secondaryinput" class="taginput">
+                <a href="#" id="secondaryadd" class="btn-flat-border">追加</a>
+                <div class="secondarytags">
 
+                </div>
             </div>
         </div>
 
     </div>
+
+    <script src="utils.js"></script>
+    <script src="TagManager.js"></script>
+    <script src="mkdb.js"></script>
 
 </body>
 
