@@ -6,8 +6,7 @@ if (typeof TagDB === "undefined") {
 
 //データセット
 
-TagDB.primaryTags = new Array();
-TagDB.secondaryTags = new Array();
+TagDB.Tags = new Array();
 
 //データ初期化
 (function() {
@@ -23,18 +22,8 @@ TagDB.AddTag = function() {
 
     let db, input;
 
-    if (id === "primaryadd") {
-        // console.log("primary");
-        db = TagDB.primaryTags;
-        input = document.getElementById("primaryinput");
-    } else if (id === "secondaryadd") {
-        // console.log("secondary");
-        db = TagDB.secondaryTags;
-        input = document.getElementById("secondaryinput");
-    } else {
-        console.log("AddTag error");
-        return;
-    }
+    db = TagDB.Tags;
+    input = document.getElementById("dbinput");
 
     let text = input.value;
 
@@ -46,18 +35,14 @@ TagDB.AddTag = function() {
     db.push(text);
 
     TagDB.UpdateDisplay();
+
+    input.value = "";
 }
 
 TagDB.UpdateDisplay = function() {
 
-
-    console.log(document.getElementById("ptest"));
-
-    let tags = document.getElementById("primarytags");
-    console.log(tags);
+    let tags = document.getElementById("dbtags");
     let children = tags.children;
-    console.log(children);
-    console.log(tags.firstChild);
 
     // イベントの解除
     // for (let i = 0, l = children.length; i < l; ++i) {
@@ -69,21 +54,24 @@ TagDB.UpdateDisplay = function() {
         tags.removeChild(tags.firstChild);
     }
 
-    for (let k = 0, lt = TagDB.primaryTags.length; k < lt; ++k) {
+    //タグ一覧の更新
+    for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
 
         let p = document.createElement('p');
         tags.insertAdjacentElement('beforeend', p);
 
-        const text = document.createTextNode(TagDB.primaryTags[k]);
+        const text = document.createTextNode(TagDB.Tags[k]);
+        //Pタグに文字をセット
         p.appendChild(text);
         const button = document.createElement('button');
         const bttext = document.createTextNode('削除');
+        //ボタンに削除という名前をセット
         button.appendChild(bttext);
+        //Pタグ内にボタンを追加
         p.appendChild(button);
 
         tags.insertAdjacentElement('beforeend', p);
     }
 }
 
-document.getElementById("primaryadd").addEventListener('click', TagDB.AddTag);
-document.getElementById("secondaryadd").addEventListener('click', TagDB.AddTag);
+document.getElementById("dbadd").addEventListener('click', TagDB.AddTag);
