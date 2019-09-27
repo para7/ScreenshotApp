@@ -13,15 +13,20 @@
 #gridcontainer {
     display: grid;
     grid-template-columns: 49.5% 0.3rem 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 2rem 1fr;
+}
+
+#gridtop {
+    grid-row: 1 / 2;
+    grid-column: 1 / 4;
 }
 
 #gridleft {
-    grid-row: 1 / 2;
+    grid-row: 2 / 3;
     grid-column: 1 / 2;
 }
 
 #gridright {
-    grid-row: 1 / 2;
+    grid-row: 2 / 3;
     grid-column: 3 / 4;
 }
