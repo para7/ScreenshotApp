@@ -1,7 +1,7 @@
 'use strict';
 
-if (typeof TagDB === "undefined") {
-    var TagDB = {};
+if (typeof TagDB === 'undefined') {
+  var TagDB = {};
 }
 
 //データセット
@@ -9,69 +9,76 @@ if (typeof TagDB === "undefined") {
 TagDB.Tags = new Array();
 
 //データ初期化
-(function() {
-    console.log("Tag init");
-
-
-}())
+(function() { console.log('Tag init'); }())
 
 //データ操作メソッド
 TagDB.AddTag = function() {
-    let id = event.target.id;
-    // console.log(id);
+  let id = event.target.id;
 
-    let db, input;
+  let db, input;
 
-    db = TagDB.Tags;
-    input = document.getElementById("dbinput");
+  db = TagDB.Tags;
+  input = document.getElementById('dbinput');
 
-    let text = input.value;
+  let text = input.value;
 
-    if (text === "") {
-        console.log("empty");
-        return;
-    }
+  if (text === '') {
+    console.log('empty');
+    return;
+  }
 
-    db.push(text);
+  db.push(text);
 
-    TagDB.UpdateDisplay();
+  TagDB.UpdateDisplay();
 
-    input.value = "";
-}
+  input.value = '';
+};
+
+TagDB.DeleteTag = function() {
+  let current = event.currentTarget;
+
+  current.removeEventListener('click', TagDB.DeleteTag);
+  current.parentNode.removeChild(current);
+};
+
+//再構築する
+TagDB.UpdateTagArray = function() {};
 
 TagDB.UpdateDisplay = function() {
+  let tags = document.getElementById('dbtags');
+  let children = tags.children;
 
-    let tags = document.getElementById("dbtags");
-    let children = tags.children;
+  // イベントの解除
+  for (let i = 0, l = children.length; i < l; ++i) {
+    children[i].removeEventListener('click', TagDB.DeleteTag);
+  }
 
-    // イベントの解除
-    // for (let i = 0, l = children.length; i < l; ++i) {
-    //     children[i].removeEventListener('click', SetClipboard);
-    // }
+  // 要素のリセット
+  while (tags.firstChild) {
+    tags.removeChild(tags.firstChild);
+  }
 
-    // 要素のリセット
-    while (tags.firstChild) {
-        tags.removeChild(tags.firstChild);
-    }
+  //タグ一覧の更新
+  for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
+    let div = document.createElement('div');
 
-    //タグ一覧の更新
-    for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
+    tags.insertAdjacentElement('beforeend', div);
 
-        let p = document.createElement('p');
-        tags.insertAdjacentElement('beforeend', p);
+    const text = document.createTextNode(TagDB.Tags[k]);
+    // Pタグに文字をセット
+    div.appendChild(text);
+    const button = document.createElement('button');
+    const bttext = document.createTextNode('削 除');
+    //ボタンに削除という名前をセット
+    button.appendChild(bttext);
+    //ボタンにイベントをセット
+    button.addEventListener('click', TagDB.DeleteTag);
+    // Pタグ内にボタンを追加
+    div.appendChild(button);
 
-        const text = document.createTextNode(TagDB.Tags[k]);
-        //Pタグに文字をセット
-        p.appendChild(text);
-        const button = document.createElement('button');
-        const bttext = document.createTextNode('削除');
-        //ボタンに削除という名前をセット
-        button.appendChild(bttext);
-        //Pタグ内にボタンを追加
-        p.appendChild(button);
+    tags.insertAdjacentElement('beforeend', div);
+  }
+};
 
-        tags.insertAdjacentElement('beforeend', p);
-    }
-}
-
-document.getElementById("dbadd").addEventListener('click', TagDB.AddTag);
+document.getElementById('dbadd')
+  .addEventListener('click', TagDB.AddTag);
