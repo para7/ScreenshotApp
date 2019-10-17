@@ -4,15 +4,15 @@
 }
 
 
-/* 
+/*
 #otherinput {
     width: 40%
-} 
+}
 */
 
 #gridcontainer {
     display: grid;
-    grid-template-columns: 25rem 1fr;
+    grid-template-columns: 18rem 1fr;
     grid-template-rows: 2rem 1fr;
 }
 
