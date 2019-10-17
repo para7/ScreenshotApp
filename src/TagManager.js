@@ -35,14 +35,18 @@ TagDB.AddTag = function() {
 };
 
 TagDB.DeleteTag = function() {
-  let current = event.currentTarget;
+  let current = event.currentTarget.parentNode;
 
-  current.removeEventListener('click', TagDB.DeleteTag);
-  current.parentNode.removeChild(current);
+  let text = current.firstChild.textContent;
+
+  let db = TagDB.Tags;
+
+  //消す
+  const index = db.findIndex((v) => v === text);
+  db.splice(index, 1);
+
+  TagDB.UpdateDisplay();
 };
-
-//再構築する
-TagDB.UpdateTagArray = function() {};
 
 TagDB.UpdateDisplay = function() {
   let tags = document.getElementById('dbtags');
@@ -58,15 +62,25 @@ TagDB.UpdateDisplay = function() {
     tags.removeChild(tags.firstChild);
   }
 
+  let form = document.createElement('form');
+  form.name = "taglist";
+
   //タグ一覧の更新
   for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
+    //全体のdiv
     let div = document.createElement('div');
 
-    tags.insertAdjacentElement('beforeend', div);
+    let cbox = document.createElement('input');
+    cbox.type = 'checkbox';
 
+    //文字
+    let span
+      = document.createElement('span');
     const text = document.createTextNode(TagDB.Tags[k]);
-    // Pタグに文字をセット
-    div.appendChild(text);
+    span.appendChild(text);
+
+    //大本のdivにセット
+    div.appendChild(span);
     const button = document.createElement('button');
     const bttext = document.createTextNode('削 除');
     //ボタンに削除という名前をセット
@@ -82,3 +96,35 @@ TagDB.UpdateDisplay = function() {
 
 document.getElementById('dbadd')
   .addEventListener('click', TagDB.AddTag);
+
+/*
+
+TagDB
+
+データ
+
+DOMの情報
+
+メソッド
+
+
+init
+jsonからデータを読み出す
+配列を初期化
+UpdateDisplayを呼ぶ
+
+AddTag
+配列にデータを追加
+SaveJSON
+UpdateDisplay
+
+SaveJSON
+JSONを保存する
+
+ReadJSON
+init内で処理を行うので不要
+
+UpdateDisplay
+配列の情報をもとに画面を再構築する
+
+*/
