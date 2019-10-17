@@ -64,34 +64,42 @@ TagDB.UpdateDisplay = function() {
 
   let form = document.createElement('form');
   form.name = "taglist";
+  tags.appendChild(form);
 
   //タグ一覧の更新
   for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
     //全体のdiv
     let div = document.createElement('div');
 
-    let cbox = document.createElement('input');
-    cbox.type = 'checkbox';
-
     //文字
-    let span
-      = document.createElement('span');
+    let span = document.createElement('span');
     const text = document.createTextNode(TagDB.Tags[k]);
     span.appendChild(text);
 
-    //大本のdivにセット
-    div.appendChild(span);
+    //チェックボックス
+    let cbox = document.createElement('input');
+    cbox.type = 'checkbox';
+    cbox.value = TagDB.Tags[k];
+
+    //ボタンをセット
     const button = document.createElement('button');
     const bttext = document.createTextNode('削 除');
-    //ボタンに削除という名前をセット
     button.appendChild(bttext);
-    //ボタンにイベントをセット
     button.addEventListener('click', TagDB.DeleteTag);
-    // Pタグ内にボタンを追加
+
+    //チェックボックスを追加
+    div.appendChild(cbox);
+    //タグの中身を追加
+    div.appendChild(span);
+    //削除ボタンを追加
     div.appendChild(button);
 
-    tags.insertAdjacentElement('beforeend', div);
+    console.log(div);
+
+    // form.appendChild(div);
+    form.appendChild(cbox);
   }
+  console.log(form);
 };
 
 document.getElementById('dbadd')
