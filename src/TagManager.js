@@ -101,7 +101,7 @@ TagDB.SaveTag = function() {
         // 書き出しに失敗した場合
         if (err) {
             console.log("書き込み中にエラーが発生しました。" + err)
-            throw err
+            throw err;
         }
         // 書き出しに成功した場合
         else {
@@ -111,33 +111,32 @@ TagDB.SaveTag = function() {
 };
 
 TagDB.LoadTag = function() {
-    const fs = require('fs');
+    return new Promise((resolve, reject) => {
+        const fs = require('fs');
 
-    console.log("loadtag start");
-
-    fs.readFile(TagDB.tagJsonPath, 'utf-8', (err, json) => {
-        // 失敗した場合
-        if (err) {
-            console.log("読み込み中にエラーが発生しました。" + err)
-            throw err
-        }
-        // 成功した場合
-        else {
-            console.log("load");
-            TagDB.Tags = JSON.parse(json);
-            console.log(TagDB.Tags);
-            console.log('load end');
-        }
+        setTimeout(() => {
+            fs.readFile(TagDB.tagJsonPath, 'utf-8', (err, json) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(JSON.parse(json));
+                }
+            });
+        }, 1000);
     });
 };
 
 //データ初期化
 (function() {
 console.log('Tag init');
-TagDB.LoadTag();
-console.log('update');
-TagDB.UpdateDisplay();
-}())
+
+//読み込みは同期処理
+TagDB.LoadTag()
+    .then(x => {
+        TagDB.Tags = x;
+        TagDB.UpdateDisplay();
+    });
+})()
 
 document.getElementById('dbadd').addEventListener('click', TagDB.AddTag);
 
