@@ -4,6 +4,10 @@ if (typeof TagDB === 'undefined') {
     var TagDB = {};
 }
 
+//データセット
+TagDB.tagJsonPath = "./TagInfo.json";
+TagDB.Tags = new Array();
+
 //データ操作メソッド
 TagDB.AddTag = function() {
     let id = event.target.id;
@@ -57,6 +61,8 @@ TagDB.UpdateDisplay = function() {
     form.name = "taglist";
     tags.appendChild(form);
 
+    console.log(TagDB.Tags);
+
     //タグ一覧の更新
     for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
         //全体のdiv
@@ -86,13 +92,50 @@ TagDB.UpdateDisplay = function() {
     console.log(form);
 };
 
-//データセット
-TagDB.Tags = new Array();
+TagDB.SaveTag = function() {
+    const fs = require('fs');
+
+    var json = JSON.stringify(TagDB.Tags, null, 2);
+
+    fs.writeFile(TagDB.tagJsonPath, json, (err) => {
+        // 書き出しに失敗した場合
+        if (err) {
+            console.log("書き込み中にエラーが発生しました。" + err)
+            throw err
+        }
+        // 書き出しに成功した場合
+        else {
+            console.log("ファイルが正常に書き出しされました");
+        }
+    });
+};
+
+TagDB.LoadTag = function() {
+    const fs = require('fs');
+
+    console.log("loadtag start");
+
+    fs.readFile(TagDB.tagJsonPath, 'utf-8', (err, json) => {
+        // 失敗した場合
+        if (err) {
+            console.log("読み込み中にエラーが発生しました。" + err)
+            throw err
+        }
+        // 成功した場合
+        else {
+            console.log("load");
+            TagDB.Tags = JSON.parse(json);
+            console.log(TagDB.Tags);
+            console.log('load end');
+        }
+    });
+};
 
 //データ初期化
 (function() {
 console.log('Tag init');
-TagDB.Tags = new Array("ミリシタ", "七尾百合子", "高山紗代子");
+TagDB.LoadTag();
+console.log('update');
 TagDB.UpdateDisplay();
 }())
 
