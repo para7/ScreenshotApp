@@ -34,9 +34,9 @@ function splash(msg, custom_set)
         var style = document.createElement('style');
         style.id = set.style_id;
         style.innerHTML = "#" + set.outer_id + " { " + set.outer_style + " } " +
-          "#" + set.outer_id + " > #" + set.message_id + " {opacity: 0;transition: opacity " + set.fadeout_sec + "s " + set.trans_out + ";-webkit-transition: opacity " + set.fadeout_sec + "s " + set.trans_out + ";} " +
-          "#" + set.outer_id + ".show > #" + set.message_id + " {opacity: " + set.opacity + ";transition: opacity " + set.fadein_sec + "s " + set.trans_in + ";-webkit-transition: opacity " + set.fadein_sec + "s " + set.trans_in + ";}" +
-          "#" + set.message_id + " { " + set.message_style + " } ";
+            "#" + set.outer_id + " > #" + set.message_id + " {opacity: 0;transition: opacity " + set.fadeout_sec + "s " + set.trans_out + ";-webkit-transition: opacity " + set.fadeout_sec + "s " + set.trans_out + ";} " +
+            "#" + set.outer_id + ".show > #" + set.message_id + " {opacity: " + set.opacity + ";transition: opacity " + set.fadein_sec + "s " + set.trans_in + ";-webkit-transition: opacity " + set.fadein_sec + "s " + set.trans_in + ";}" +
+            "#" + set.message_id + " { " + set.message_style + " } ";
         document.body.appendChild(style);
     }
 

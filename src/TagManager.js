@@ -67,6 +67,7 @@ TagDB.UpdateDisplay = function() {
     for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
         //全体のdiv
         let div = document.createElement('div');
+        div.className = 'tags';
 
         //文字
         let span = document.createElement('span');
@@ -114,15 +115,13 @@ TagDB.LoadTag = function() {
     return new Promise((resolve, reject) => {
         const fs = require('fs');
 
-        setTimeout(() => {
-            fs.readFile(TagDB.tagJsonPath, 'utf-8', (err, json) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(JSON.parse(json));
-                }
-            });
-        }, 1000);
+        fs.readFile(TagDB.tagJsonPath, 'utf-8', (err, json) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(JSON.parse(json));
+            }
+        });
     });
 };
 
@@ -173,3 +172,72 @@ UpdateDisplay
 配列の情報をもとに画面を再構築する
 
 */
+
+//https://qiita.com/tnakagawa/items/68260254045dce44c913
+
+var $ = require('jQuery');
+
+// 初期処理
+function init()
+{
+    // ファイルドロップイベント設定
+    $("#filedrop").on("dragover", eventStop).on("drop", filedrop);
+}
+// ファイルがドラッグされた場合
+function eventStop(event)
+{
+    // イベントキャンセル
+    event.stopPropagation();
+    event.preventDefault();
+    // 操作をリンクに変更
+    event.originalEvent.dataTransfer.dropEffect = "link";
+}
+// ファイルがドロップされた場合
+function filedrop(event)
+{
+    try {
+        // イベントキャンセル
+        event.stopPropagation();
+        event.preventDefault();
+        // ファイル存在チェック
+        if (event.originalEvent.dataTransfer.files) {
+            // ファイル取得
+            var files = event.originalEvent.dataTransfer.files;
+            // ファイル情報を空に設定
+            $("[data-name='fileinfo']").empty();
+            // ファイル数分ループ
+            for (var i = 0; i < files.length; i++) {
+                // ファイル取得
+                var file = files[i];
+                console.log(file);
+                // テーブル生成
+                var table = $("<table>");
+                // ファイル名設定
+                table.append($("<tr>")
+                                 .append($("<td>").text("name"))
+                                 .append($("<td>").text(file.name)));
+                // ファイル最終更新日時設定
+                table.append($("<tr>")
+                                 .append($("<td>").text("lastModifiedDate"))
+                                 .append($("<td>").text(file.lastModifiedDate)));
+                // ファイルサイズ設定（Blobのプロパティ）
+                table.append($("<tr>")
+                                 .append($("<td>").text("size"))
+                                 .append($("<td>").text(file.size)));
+                // ファイルタイプ設定（Blobのプロパティ）
+                table.append($("<tr>")
+                                 .append($("<td>").text("type"))
+                                 .append($("<td>").text(file.type)));
+                // 区切り追加
+                $("[data-name='fileinfo']").append($("<hr>"));
+                // テーブル追加
+                $("[data-name='fileinfo']").append(table);
+            }
+        }
+    } catch (e) {
+        // エラーの場合
+        alert(e.message);
+    }
+}
+// 初期処理登録
+$(init);
