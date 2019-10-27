@@ -207,31 +207,33 @@ function filedrop(event)
             $("[data-name='fileinfo']").empty();
             // ファイル数分ループ
             for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                if (!file || file.type.indexOf('image/') < 0) {
+                    continue;
+                }
+
+                // https://qiita.com/amamamaou/items/1b51c834d62c8567fad4#drop%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88
+
                 // ファイル取得
                 var file = files[i];
-                console.log(file);
-                // テーブル生成
-                var table = $("<table>");
-                // ファイル名設定
-                table.append($("<tr>")
-                                 .append($("<td>").text("name"))
-                                 .append($("<td>").text(file.name)));
-                // ファイル最終更新日時設定
-                table.append($("<tr>")
-                                 .append($("<td>").text("lastModifiedDate"))
-                                 .append($("<td>").text(file.lastModifiedDate)));
-                // ファイルサイズ設定（Blobのプロパティ）
-                table.append($("<tr>")
-                                 .append($("<td>").text("size"))
-                                 .append($("<td>").text(file.size)));
-                // ファイルタイプ設定（Blobのプロパティ）
-                table.append($("<tr>")
-                                 .append($("<td>").text("type"))
-                                 .append($("<td>").text(file.type)));
-                // 区切り追加
-                $("[data-name='fileinfo']").append($("<hr>"));
-                // テーブル追加
-                $("[data-name='fileinfo']").append(table);
+                console.log(file.path);
+
+                // 画像要素の生成
+
+                var image = new Image(), blobURL = URL.createObjectURL(file);
+
+                // src にURLを入れる
+                image.src = blobURL;
+
+                // 画像読み込み完了後
+                image.addEventListener('load', function() {
+                    // File/BlobオブジェクトにアクセスできるURLを開放
+                    URL.revokeObjectURL(blobURL);
+
+                    // #output へ出力
+                    $("[data-name='fileinfo']").append(image);
+                });
             }
         }
     } catch (e) {
