@@ -4,9 +4,13 @@ if (typeof TagDB === 'undefined') {
     var TagDB = {};
 }
 
+if (typeof $ != 'function') {
+    var $ = require('jQuery');
+}
+
 //データセット
 TagDB.tagJsonPath = "./TagInfo.json";
-TagDB.Tags = new Array();
+TagDB.tags = new Array();
 
 //データ操作メソッド
 TagDB.AddTag = function() {
@@ -14,7 +18,7 @@ TagDB.AddTag = function() {
 
     let db, input;
 
-    db = TagDB.Tags;
+    db = TagDB.tags;
     input = document.getElementById('dbinput');
 
     let text = input.value;
@@ -41,7 +45,7 @@ TagDB.GetCheckedTag = function() {
 TagDB.DeleteTag = function() {
     const checked = TagDB.GetCheckedTag();
 
-    TagDB.Tags = TagDB.Tags
+    TagDB.tags = TagDB.tags
                      .map(value => {
                          const del = checked.find(z => z === value);
 
@@ -79,20 +83,20 @@ TagDB.UpdateDisplay = function() {
     // console.log(TagDB.Tags);
 
     //タグ一覧の更新
-    for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
+    for (let k = 0, lt = TagDB.tags.length; k < lt; ++k) {
         //全体のdiv
         let div = document.createElement('div');
         div.className = 'tags';
 
         //文字
         let span = document.createElement('span');
-        const text = document.createTextNode(TagDB.Tags[k]);
+        const text = document.createTextNode(TagDB.tags[k]);
         span.appendChild(text);
 
         //チェックボックス
         let cbox = document.createElement('input');
         cbox.type = 'checkbox';
-        cbox.value = TagDB.Tags[k];
+        cbox.value = TagDB.tags[k];
         cbox.name = 'tag';
 
         //チェックボックスを追加
@@ -111,7 +115,7 @@ TagDB.UpdateDisplay = function() {
 TagDB.SaveTag = function() {
     const fs = require('fs');
 
-    var json = JSON.stringify(TagDB.Tags, null, 2);
+    var json = JSON.stringify(TagDB.tags, null, 2);
 
     fs.writeFile(TagDB.tagJsonPath, json, (err) => {
         // 書き出しに失敗した場合
@@ -140,21 +144,8 @@ TagDB.LoadTag = function() {
     });
 };
 
-//データ初期化
-(function() {
-console.log('Tag init');
-
-//読み込みは同期処理
-TagDB.LoadTag()
-    .then(x => {
-        TagDB.Tags = x;
-        TagDB.UpdateDisplay();
-    });
-})()
-
-document.getElementById('dbadd').addEventListener('click', TagDB.AddTag);
-
-document.getElementById('deletetag').addEventListener('click', TagDB.DeleteTag);
+$('#dbadd').on('click', TagDB.AddTag);
+$('#deletetag').on('click', TagDB.DeleteTag);
 
 /*
 
@@ -190,10 +181,15 @@ UpdateDisplay
 
 //https://qiita.com/tnakagawa/items/68260254045dce44c913
 
-var $ = require('jQuery');
-
 // 初期処理
 function init() {
+    //読み込みは同期処理
+    TagDB.LoadTag()
+        .then(x => {
+            TagDB.tags = x;
+            TagDB.UpdateDisplay();
+        });
+
     // ファイルドロップイベント設定
     $("#grideditor").on("dragover", eventStop).on("drop", filedrop);
 }
