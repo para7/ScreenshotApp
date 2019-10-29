@@ -2,8 +2,7 @@
 
 class ImageData {
 
-    constructor()
-    {
+    constructor() {
         this.text = "";
         this.tags = [];
         this.filepath = "";
@@ -19,8 +18,7 @@ ScreenShotApp.screenShotsData = new Array();
 const DatabasePath = "./ScreenshotsInfo.json";
 
 // 画像クリック時の処理
-function SetClipboard()
-{
+function SetClipboard() {
 
     let filepath = decodeURI(event.target.src);
     filepath = filepath.substr(7);
@@ -41,8 +39,7 @@ let button = document.getElementById("search");
 
 // イベントリスナーへの登録
 
-function searchEvent()
-{
+function searchEvent() {
 
     let input = document.getElementById("searchinput");
     let searchword = input.value;
@@ -77,8 +74,7 @@ function searchEvent()
             for (let k = 0, lt = ScreenShotApp.screenShotsData[i].tags.length; k < lt; ++k) {
                 console.log(ScreenShotApp.screenShotsData[i].tags[k])
 
-                if (ScreenShotApp.screenShotsData[i].tags[k] == searchword)
-                {
+                if (ScreenShotApp.screenShotsData[i].tags[k] == searchword) {
                     result = true;
                     break;
                 }
@@ -102,8 +98,7 @@ function searchEvent()
     }
 }
 
-function onKeyPress(e)
-{
+function onKeyPress(e) {
     if (e.keyCode == 13) {
         searchEvent();
     }
@@ -114,8 +109,7 @@ button.addEventListener('click', searchEvent);
 document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
 
 //仮データのセット
-function setdata()
-{
+function setdata() {
 
     let imagedata = new ImageData();
     let tags = [ "ミリシタ", "七尾百合子" ];
@@ -140,8 +134,7 @@ function setdata()
     ScreenShotApp.screenShotsData.push(imagedata);
 }
 
-function readjson()
-{
+function readjson() {
     const fs = require('fs');
 
     fs.readFile(DatabasePath, 'utf-8', (err, json) => {
@@ -157,8 +150,7 @@ function readjson()
     });
 };
 
-function savejson()
-{
+function savejson() {
 
     const fs = require('fs');
 

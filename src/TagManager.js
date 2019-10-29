@@ -31,15 +31,30 @@ TagDB.AddTag = function() {
     input.value = '';
 };
 
-TagDB.DeleteTag = function() {
-    const tags = document.taglist.tag;
+// https://qiita.com/ginpei/items/9659c5bf4c82f87514de#%E5%85%83%E3%83%8D%E3%82%BF
+TagDB.GetCheckedTag = function() {
+    var checked = $('[name=tag]:checked').map(function(index, el) { return $(this).val(); });
 
-    for (let i = 0; i < tags.length; i++) {
-        if (tags[i].checked) { //(color1[i].checked === true)と同じ
-            const index = TagDB.Tags.findIndex((v) => v === tags[i].value);
-            TagDB.Tags.splice(index, 1);
-        }
-    }
+    return $.makeArray(checked);
+};
+
+TagDB.DeleteTag = function() {
+    const checked = TagDB.GetCheckedTag();
+
+    TagDB.Tags = TagDB.Tags
+                     .map(value => {
+                         const del = checked.find(z => z === value);
+
+                         //見つかったら値を返す
+                         if (del == null) {
+                             return value;
+                         }
+                         //見つからなかったらnullにする
+                         return null;
+                     })
+                     //null要素を消す
+                     .filter(v => v);
+
     TagDB.UpdateDisplay();
 };
 
@@ -61,7 +76,7 @@ TagDB.UpdateDisplay = function() {
     form.name = "taglist";
     tags.appendChild(form);
 
-    console.log(TagDB.Tags);
+    // console.log(TagDB.Tags);
 
     //タグ一覧の更新
     for (let k = 0, lt = TagDB.Tags.length; k < lt; ++k) {
@@ -85,12 +100,12 @@ TagDB.UpdateDisplay = function() {
         //タグの中身を追加
         div.appendChild(span);
 
-        console.log(div);
+        // console.log(div);
 
         // form.appendChild(div);
         form.appendChild(div);
     }
-    console.log(form);
+    // console.log(form);
 };
 
 TagDB.SaveTag = function() {
@@ -178,62 +193,59 @@ UpdateDisplay
 var $ = require('jQuery');
 
 // 初期処理
-function init()
-{
+function init() {
     // ファイルドロップイベント設定
-    $("#filedrop").on("dragover", eventStop).on("drop", filedrop);
+    $("#grideditor").on("dragover", eventStop).on("drop", filedrop);
 }
+
 // ファイルがドラッグされた場合
-function eventStop(event)
-{
+function eventStop(event) {
     // イベントキャンセル
     event.stopPropagation();
     event.preventDefault();
     // 操作をリンクに変更
     event.originalEvent.dataTransfer.dropEffect = "link";
 }
+
 // ファイルがドロップされた場合
-function filedrop(event)
-{
+function filedrop(event) {
     try {
         // イベントキャンセル
         event.stopPropagation();
         event.preventDefault();
+
         // ファイル存在チェック
         if (event.originalEvent.dataTransfer.files) {
+
             // ファイル取得
-            var files = event.originalEvent.dataTransfer.files;
+            let files = event.originalEvent.dataTransfer.files;
+
             // ファイル情報を空に設定
-            $("[data-name='fileinfo']").empty();
+            let fileinfo = $("[data-name='fileinfo']");
+            fileinfo.empty();
+
             // ファイル数分ループ
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
+            for (let i = 0; i < files.length; i++) {
+
+                // ファイル取得
+                let file = files[i];
 
                 if (!file || file.type.indexOf('image/') < 0) {
                     continue;
                 }
 
                 // https://qiita.com/amamamaou/items/1b51c834d62c8567fad4#drop%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88
+                let blobURL = URL.createObjectURL(file);
 
-                // ファイル取得
-                var file = files[i];
-                console.log(file.path);
+                let image = $("<img>")
+                                .attr('src', blobURL)
+                                .attr('width', "50%")
+                                .on('load', function() {
+                                    URL.revokeObjectURL(blobURL);
+                                    console.log("revoke");
+                                });
 
-                // 画像要素の生成
-
-                var image = new Image(), blobURL = URL.createObjectURL(file);
-
-                // src にURLを入れる
-                image.src = blobURL;
-
-                // 画像読み込み完了後
-                image.addEventListener('load', function() {
-                    // File/BlobオブジェクトにアクセスできるURLを開放
-                    URL.revokeObjectURL(blobURL);
-
-                    // #output へ出力
-                    $("[data-name='fileinfo']").append(image);
-                });
+                $("[data-name='fileinfo']").append(image);
             }
         }
     } catch (e) {

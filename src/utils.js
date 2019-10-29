@@ -2,8 +2,7 @@
 
 // https://qiita.com/RAWSEQ/items/fec6cef0cab3e50fa07d
 
-function splash(msg, custom_set)
-{
+function splash(msg, custom_set) {
 
     //Default
     var set = {
