@@ -63,3 +63,37 @@ function splash(msg, custom_set) {
     setTimeout(function() { if (splash) splash.classList.remove('show'); }, set.wait_sec * 1000);
     setTimeout(function() { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); if (set.on_splash_vanished) set.on_splash_vanished(); }, (set.fadeout_sec + set.wait_sec) * 1000);
 }
+
+if (typeof Utils === 'undefined') {
+    var Utils = {};
+}
+
+Utils.SaveJson = function(path, obj) {
+    return new Promise((resolve, reject) => {
+        const fs = require('fs');
+
+        var json = JSON.stringify(obj, null, 2);
+
+        fs.writeFile(path, json, (err) => {
+            if (err) {
+                reject(obj);
+            } else {
+                resolve(0);
+            }
+        });
+    });
+};
+
+Utils.LoadJson = function(path) {
+    return new Promise((resolve, reject) => {
+        const fs = require('fs');
+
+        fs.readFile(path, 'utf-8', (err, json) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(JSON.parse(json));
+            }
+        });
+    });
+};

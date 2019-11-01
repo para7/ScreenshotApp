@@ -55,15 +55,11 @@ makeDB.UpdateDisplay = function(tags) {
         //タグの中身を追加
         div.appendChild(span);
 
-        // console.log(div);
-
-        // form.appendChild(div);
         form.appendChild(div);
     }
-    // console.log(form);
 };
 
-function Delete() {
+makeDB.tagDelete = function() {
     const checked = makeDB.GetCheckedTag();
     TagDB.DeleteTags(checked)
         .then(x => {
@@ -71,6 +67,7 @@ function Delete() {
             makeDB.UpdateDisplay(x);
         });
 };
+$('#deletetag').on('click', makeDB.tagDelete);
 
 makeDB.addTag = function() {
     return new Promise((resolve, reject) => {
@@ -95,9 +92,7 @@ makeDB.addTag = function() {
         input.value = '';
     });
 };
-
 $('#dbadd').on('click', makeDB.addTag);
-$('#deletetag').on('click', Delete);
 
 //https://qiita.com/tnakagawa/items/68260254045dce44c913
 
@@ -124,7 +119,13 @@ makeDB.eventStop = function(event) {
 };
 
 makeDB.addScreenshot = function() {
-    console.log("add screenshot");
+    var div = $(event.target).parent().parent();
+
+    var output = {};
+    output.txt = div.children('textarea').val();
+    output.url = div.children('img').attr('src');
+
+    // Utils.SaveJson("test.json", output);
 };
 
 // ファイルがドロップされた場合
@@ -157,24 +158,28 @@ makeDB.filedrop = function(event) {
                 // https://qiita.com/amamamaou/items/1b51c834d62c8567fad4#drop%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88
                 let blobURL = URL.createObjectURL(file);
 
-                let image = $("<img>")
-                                .attr('src', blobURL)
-                                .attr('class', "editor")
-                                .on('load', function() {
-                                    URL.revokeObjectURL(blobURL);
-                                    console.log("revoke");
-                                });
+                let image
+                    = $("<img>")
+                          .attr('src', blobURL)
+                          .attr('class', "editor")
+                          .on('load', function() {
+                              URL.revokeObjectURL(blobURL);
+                              console.log("revoke");
+                          });
 
-                let textarea = $('<textarea></textarea>')
-                                   .attr('class', 'editor');
+                let textarea
+                    = $('<textarea></textarea>')
+                          .attr('class', 'editor');
 
-                let div = $("<div></div>").attr("class", "center");
+                let div
+                    = $("<div></div>").attr("class", "center");
 
-                let button = $('<a></a>')
-                                 .attr('href', '#')
-                                 .attr('class', 'btn-flat-border')
-                                 .text("登録")
-                                 .on("click", makeDB.addScreenshot);
+                let button
+                    = $('<a></a>')
+                          .attr('href', '#')
+                          .attr('class', 'btn-flat-border')
+                          .text("登録")
+                          .on("click", makeDB.addScreenshot);
 
                 div.append(button);
 

@@ -10,24 +10,27 @@ TagDB.tags = new Array();
 
 TagDB.DeleteTags = function(checked) {
     return new Promise((resolve, reject) => {
-        TagDB.tags = TagDB.tags
-                         .map(value => {
-                             const del = checked.find(z => z === value);
+        TagDB.tags
+            = TagDB.tags
+                  .map(value => {
+                      const del = checked.find(z => z === value);
 
-                             //見つかったら値を返す
-                             if (del == null) {
-                                 return value;
-                             }
-                             //見つからなかったらnullにする
-                             return null;
-                         })
-                         //null要素を消す
-                         .filter(v => v);
+                      //見つかったら値を返す
+                      if (del == null) {
+                          return value;
+                      }
+                      //見つからなかったらnullにする
+                      return null;
+                  })
+                  //null要素を消す
+                  .filter(v => v);
         resolve(TagDB.tags);
     });
 };
 
 TagDB.SaveTag = function() {
+    return Utils.SaveJson(TagDB.tagJsonPath, TagDB.tags);
+
     const fs = require('fs');
 
     var json = JSON.stringify(TagDB.tags, null, 2);
@@ -46,6 +49,8 @@ TagDB.SaveTag = function() {
 };
 
 TagDB.LoadTag = function() {
+    return Utils.LoadJson(TagDB.tagJsonPath);
+
     return new Promise((resolve, reject) => {
         const fs = require('fs');
 
@@ -58,35 +63,3 @@ TagDB.LoadTag = function() {
         });
     });
 };
-
-/*
-
-TagDB
-
-データ
-
-DOMの情報
-
-メソッド
-
-
-init
-jsonからデータを読み出す
-配列を初期化
-UpdateDisplayを呼ぶ
-
-AddTag
-配列にデータを追加
-SaveJSON
-UpdateDisplay
-
-SaveJSON
-JSONを保存する
-
-ReadJSON
-init内で処理を行うので不要
-
-UpdateDisplay
-配列の情報をもとに画面を再構築する
-
-*/
