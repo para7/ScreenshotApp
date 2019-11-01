@@ -10,6 +10,7 @@ if (typeof $ != 'function') {
 
 //データセット
 TagDB.tagJsonPath = "./TagInfo.json";
+TagDB.screenShotJsonPath = "./ScreenshotsInfo.json";
 TagDB.tags = new Array();
 
 //データ操作メソッド
@@ -191,20 +192,24 @@ function init() {
         });
 
     // ファイルドロップイベント設定
-    $("#grideditor").on("dragover", eventStop).on("drop", filedrop);
+    $("#grideditor").on("dragover", TagDB.eventStop).on("drop", TagDB.filedrop);
 }
 
 // ファイルがドラッグされた場合
-function eventStop(event) {
+TagDB.eventStop = function(event) {
     // イベントキャンセル
     event.stopPropagation();
     event.preventDefault();
     // 操作をリンクに変更
     event.originalEvent.dataTransfer.dropEffect = "link";
-}
+};
+
+TagDB.addScreenshot = function() {
+    console.log("add screenshot");
+};
 
 // ファイルがドロップされた場合
-function filedrop(event) {
+TagDB.filedrop = function(event) {
     try {
         // イベントキャンセル
         event.stopPropagation();
@@ -235,13 +240,29 @@ function filedrop(event) {
 
                 let image = $("<img>")
                                 .attr('src', blobURL)
-                                .attr('width', "50%")
+                                .attr('class', "editor")
                                 .on('load', function() {
                                     URL.revokeObjectURL(blobURL);
                                     console.log("revoke");
                                 });
 
-                $("[data-name='fileinfo']").append(image);
+                let textarea = $('<textarea></textarea>')
+                                   .attr('class', 'editor');
+
+                let div = $("<div></div>").attr("class", "center");
+
+                let button = $('<a></a>')
+                                 .attr('href', '#')
+                                 .attr('class', 'btn-flat-border')
+                                 .text("登録")
+                                 .on("click", TagDB.addScreenshot);
+
+                div.append(button);
+
+                // <a href="#" id="dbadd" class="btn-flat-border">追加</a>
+
+                $("[data-name='fileinfo']").append(image).append(textarea).append(div);
+                console.log("append");
             }
         }
     } catch (e) {

@@ -36,6 +36,14 @@
 }
 
 .tags{
-margin: 0.3em;
+    margin: 0.3em;
 }
 
+.editor {
+    width: 100%;
+}
+
+textarea{
+    box-sizing:border-box;
+    height: 5rem;
+}
