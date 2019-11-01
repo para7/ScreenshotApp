@@ -4,10 +4,6 @@ if (typeof TagDB === 'undefined') {
     var TagDB = {};
 }
 
-if (typeof $ != 'function') {
-    var $ = require('jQuery');
-}
-
 //データセット
 TagDB.tagJsonPath = "./TagInfo.json";
 TagDB.screenShotJsonPath = "./ScreenshotsInfo.json";
