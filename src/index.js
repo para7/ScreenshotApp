@@ -1,19 +1,18 @@
 'use strict';
 
-class ImageData {
-
-    constructor() {
-        this.text = "";
-        this.tags = [];
-        this.filepath = "";
-    }
-}
-
 if (typeof ScreenShotApp === "undefined") {
     var ScreenShotApp = {};
 }
 
 ScreenShotApp.screenShotsData = new Array();
+
+// ShotJson.readjson();
+(function() {
+Utils.LoadJson("ScreenshotsInfo.json").then(x => {
+    console.log(x);
+    ScreenShotApp.screenShotsData = x;
+});
+})()
 
 const DatabasePath = "./ScreenshotsInfo.json";
 
@@ -108,6 +107,6 @@ function onKeyPress(e) {
 button.addEventListener('click', searchEvent);
 document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
 
-// ShotJson.setdata();
-ShotJson.readjson();
-// ShotJson.savejson();
+    // ShotJson.setdata();
+    // ShotJson.readjson();
+    // ShotJson.savejson();
