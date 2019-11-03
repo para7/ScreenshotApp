@@ -6,7 +6,6 @@ if (typeof ScreenShotApp === "undefined") {
 
 ScreenShotApp.screenShotsData = new Array();
 
-// ShotJson.readjson();
 (function() {
 Utils.LoadJson("ScreenshotsInfo.json").then(x => {
     console.log(x);

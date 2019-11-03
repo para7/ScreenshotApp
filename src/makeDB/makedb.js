@@ -97,26 +97,34 @@ $('#dbadd').on('click', makeDB.addTag);
 //https://qiita.com/tnakagawa/items/68260254045dce44c913
 
 // 初期処理
-function init() {
-    //読み込みは同期処理
+makeDB.init = function() {
     TagDB.LoadTag()
         .then(x => {
             TagDB.tags = x;
             makeDB.UpdateDisplay(x);
         });
 
+    Utils.LoadJson("ScreenshotsInfo.json").then(x => {
+        console.log(x);
+        var droparea = $("#droparea");
+        droparea.text("ここにファイルをドロップして下さい。");
+        const div = $("<div></div>").attr('data-name', "fileinfo");
+        droparea.append(div);
+    });
+
     // ファイルドロップイベント設定
     $("#grideditor").on("dragover", makeDB.eventStop).on("drop", makeDB.filedrop);
 }
 
-// ファイルがドラッグされた場合
-makeDB.eventStop = function(event) {
-    // イベントキャンセル
-    event.stopPropagation();
-    event.preventDefault();
-    // 操作をリンクに変更
-    event.originalEvent.dataTransfer.dropEffect = "link";
-};
+              // ファイルがドラッグされた場合
+              makeDB.eventStop
+    = function(event) {
+          // イベントキャンセル
+          event.stopPropagation();
+          event.preventDefault();
+          // 操作をリンクに変更
+          event.originalEvent.dataTransfer.dropEffect = "link";
+      };
 
 makeDB.addScreenshot = function() {
     var div = $(event.target).parent().parent();
@@ -189,4 +197,4 @@ makeDB.filedrop = function(event) {
     }
 }
 // 初期処理登録
-$(init);
+$(makeDB.init);
