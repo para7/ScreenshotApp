@@ -123,12 +123,12 @@ makeDB.addScreenshot = function() {
 
     var output = {};
     output.txt = div.children('textarea').val();
-    output.tags = makeDB.GetCheckedTag();
+    // output.tags = makeDB.GetCheckedTag();
     output.url = div.children('img').attr('src');
 
     console.log(output);
 
-    Utils.SaveJson("test.json", output);
+    Utils.SaveJson("ignore_test.json", output);
 };
 
 // ファイルがドロップされた場合

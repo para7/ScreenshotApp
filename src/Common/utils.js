@@ -84,7 +84,7 @@ Utils.SaveJson = function(path, obj) {
     });
 };
 
-Utils.Load = function(path) {
+Utils.LoadJson = function(path) {
     return new Promise((resolve, reject) => {
         const fs = require('fs');
 
