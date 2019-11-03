@@ -123,9 +123,12 @@ makeDB.addScreenshot = function() {
 
     var output = {};
     output.txt = div.children('textarea').val();
+    output.tags = makeDB.GetCheckedTag();
     output.url = div.children('img').attr('src');
 
-    // Utils.SaveJson("test.json", output);
+    console.log(output);
+
+    Utils.SaveJson("test.json", output);
 };
 
 // ファイルがドロップされた場合
@@ -147,7 +150,6 @@ makeDB.filedrop = function(event) {
 
             // ファイル数分ループ
             for (let i = 0; i < files.length; i++) {
-
                 // ファイル取得
                 let file = files[i];
 
@@ -155,17 +157,10 @@ makeDB.filedrop = function(event) {
                     continue;
                 }
 
-                // https://qiita.com/amamamaou/items/1b51c834d62c8567fad4#drop%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88
-                let blobURL = URL.createObjectURL(file);
-
                 let image
                     = $("<img>")
-                          .attr('src', blobURL)
-                          .attr('class', "editor")
-                          .on('load', function() {
-                              URL.revokeObjectURL(blobURL);
-                              console.log("revoke");
-                          });
+                          .attr('src', file.path)
+                          .attr('class', "editor");
 
                 let textarea
                     = $('<textarea></textarea>')
@@ -186,7 +181,6 @@ makeDB.filedrop = function(event) {
                 // <a href="#" id="dbadd" class="btn-flat-border">追加</a>
 
                 $("[data-name='fileinfo']").append(image).append(textarea).append(div);
-                console.log("append");
             }
         }
     } catch (e) {
