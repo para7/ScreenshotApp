@@ -5,6 +5,7 @@ if (typeof makeDB === 'undefined') {
 }
 
 makeDB.screenShotJsonPath = "./ScreenshotsInfo.json";
+makeDB.screenshotsInfo = "";
 
 // https://qiita.com/ginpei/items/9659c5bf4c82f87514de#%E5%85%83%E3%83%8D%E3%82%BF
 makeDB.GetCheckedTag = function() {
@@ -63,7 +64,7 @@ makeDB.tagDelete = function() {
     const checked = makeDB.GetCheckedTag();
     TagDB.DeleteTags(checked)
         .then(x => {
-            console.log(x);
+            Utils.SaveJson(TagDB.tagJsonPath, x);
             makeDB.UpdateDisplay(x);
         });
 };
@@ -73,9 +74,8 @@ makeDB.addTag = function() {
     return new Promise((resolve, reject) => {
         let id = event.target.id;
 
-        let db, input;
+        let input;
 
-        db = TagDB.tags;
         input = document.getElementById('dbinput');
 
         let text = input.value;
@@ -85,9 +85,10 @@ makeDB.addTag = function() {
             return;
         }
 
-        db.push(text);
+        TagDB.tags.push(text);
 
-        makeDB.UpdateDisplay(db);
+        makeDB.UpdateDisplay(TagDB.tags);
+        Utils.SaveJson(TagDB.tagJsonPath, TagDB.tags);
 
         input.value = '';
     });
@@ -105,7 +106,8 @@ makeDB.init = function() {
         });
 
     Utils.LoadJson("ScreenshotsInfo.json").then(x => {
-        console.log(x);
+        makeDB.screenshotsInfo = x;
+
         var droparea = $("#droparea");
         droparea.text("ここにファイルをドロップして下さい。");
         const div = $("<div></div>").attr('data-name', "fileinfo");
@@ -114,29 +116,33 @@ makeDB.init = function() {
 
     // ファイルドロップイベント設定
     $("#grideditor").on("dragover", makeDB.eventStop).on("drop", makeDB.filedrop);
-}
+};
 
-              // ファイルがドラッグされた場合
-              makeDB.eventStop
-    = function(event) {
-          // イベントキャンセル
-          event.stopPropagation();
-          event.preventDefault();
-          // 操作をリンクに変更
-          event.originalEvent.dataTransfer.dropEffect = "link";
-      };
+// ファイルがドラッグされた場合
+makeDB.eventStop = function(event) {
+    // イベントキャンセル
+    event.stopPropagation();
+    event.preventDefault();
+    // 操作をリンクに変更
+    event.originalEvent.dataTransfer.dropEffect = "link";
+};
 
 makeDB.addScreenshot = function() {
     var div = $(event.target).parent().parent();
 
     var output = {};
-    output.txt = div.children('textarea').val();
-    // output.tags = makeDB.GetCheckedTag();
-    output.url = div.children('img').attr('src');
+    output.text = div.children('textarea').val();
+    output.tags = makeDB.GetCheckedTag();
+    output.filepath = div.children('img').attr('src');
 
-    console.log(output);
+    // console.log(output);
+    // console.log(makeDB.screenshotsInfo);
+    makeDB.screenshotsInfo.push(output);
+    // console.log(makeDB.screenshotsInfo);
 
-    Utils.SaveJson("ignore_test.json", output);
+    Utils.SaveJson("ScreenshotsInfo.json", makeDB.screenshotsInfo);
+
+    div.remove();
 };
 
 // ファイルがドロップされた場合
