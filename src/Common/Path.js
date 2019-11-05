@@ -19,8 +19,12 @@ ScreenShotApp.path.screenshotsJson = path.join(userHome, "Documents/ScreenshotsA
 let doc = path.join(userHome, "Documents/ScreenshotsApp");
 
 if (!fs.existsSync(doc)) {
-    console.log("mkdir");
     fs.mkdirSync(doc);
+}
+
+if (!fs.existsSync(ScreenShotApp.path.screenshotsJson)) {
+    const ar = new Array();
+    Utils.SaveJson(ScreenShotApp.path.screenshotsJson, ar);
 }
 
 // if (typeof ShotJson === 'undefined') {

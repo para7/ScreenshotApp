@@ -7,13 +7,11 @@ if (typeof ScreenShotApp === "undefined") {
 ScreenShotApp.screenShotsData = new Array();
 
 (function() {
-Utils.LoadJson("ScreenshotsInfo.json").then(x => {
+Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
     console.log(x);
     ScreenShotApp.screenShotsData = x;
 });
 })()
-
-const DatabasePath = "./ScreenshotsInfo.json";
 
 // 画像クリック時の処理
 function SetClipboard() {
