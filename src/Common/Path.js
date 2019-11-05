@@ -1,5 +1,28 @@
 'use strict';
 
+if (typeof ScreenShotApp === "undefined") {
+    var ScreenShotApp = {};
+}
+
+if (typeof ScreenShotApp.path === "undefined") {
+    ScreenShotApp.path = {};
+}
+
+const path = require("path");
+const fs = require('fs');
+
+// https://qiita.com/potato4d/items/7131028497de53ceb48e
+const userHome = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
+
+ScreenShotApp.path.screenshotsJson = path.join(userHome, "Documents/ScreenshotsApp/ScreenshotsInfo.json");
+
+let doc = path.join(userHome, "Documents/ScreenshotsApp");
+
+if (!fs.existsSync(doc)) {
+    console.log("mkdir");
+    fs.mkdirSync(doc);
+}
+
 // if (typeof ShotJson === 'undefined') {
 //     var ShotJson = {};
 // }
