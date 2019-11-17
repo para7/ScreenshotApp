@@ -5,7 +5,6 @@ if (typeof TagDB === 'undefined') {
 }
 
 //データセット
-TagDB.tagJsonPath = "./TagInfo.json";
 TagDB.tags = new Array();
 
 TagDB.DeleteTags = function(checked) {
@@ -29,9 +28,9 @@ TagDB.DeleteTags = function(checked) {
 };
 
 TagDB.SaveTag = function() {
-    return Utils.SaveJson(TagDB.tagJsonPath, TagDB.tags);
+    return Utils.SaveJson(ScreenShotApp.path.tagJson, TagDB.tags);
 };
 
 TagDB.LoadTag = function() {
-    return Utils.LoadJson(TagDB.tagJsonPath);
+    return Utils.LoadJson(ScreenShotApp.path.tagJson);
 };

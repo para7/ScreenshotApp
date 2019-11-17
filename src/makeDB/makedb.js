@@ -4,7 +4,6 @@ if (typeof makeDB === 'undefined') {
     var makeDB = {};
 }
 
-makeDB.screenShotJsonPath = "./ScreenshotsInfo.json";
 makeDB.screenshotsInfo = "";
 
 // https://qiita.com/ginpei/items/9659c5bf4c82f87514de#%E5%85%83%E3%83%8D%E3%82%BF
@@ -64,7 +63,7 @@ makeDB.tagDelete = function() {
     const checked = makeDB.GetCheckedTag();
     TagDB.DeleteTags(checked)
         .then(x => {
-            Utils.SaveJson(TagDB.tagJsonPath, x);
+            Utils.SaveJson(ScreenShotApp.path.tagJson, x);
             makeDB.UpdateDisplay(x);
         });
 };
@@ -88,7 +87,7 @@ makeDB.addTag = function() {
         TagDB.tags.push(text);
 
         makeDB.UpdateDisplay(TagDB.tags);
-        Utils.SaveJson(TagDB.tagJsonPath, TagDB.tags);
+        Utils.SaveJson(ScreenShotApp.path.tagJson, TagDB.tags);
 
         input.value = '';
     });
@@ -105,7 +104,7 @@ makeDB.init = function() {
             makeDB.UpdateDisplay(x);
         });
 
-    Utils.LoadJson("ScreenshotsInfo.json").then(x => {
+    Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
         makeDB.screenshotsInfo = x;
 
         var droparea = $("#droparea");

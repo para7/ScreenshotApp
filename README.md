@@ -32,5 +32,3 @@ JavaScript(node.js)
 ### npm package
 electron 6.0.3
 jquery 3.4.1
-
-これはわたしがはじめてかいたじゃばすくりぷとあぷり
