@@ -1,0 +1,13 @@
+electron-packager ｛ソースディレクトリ｝ ｛アプリ名｝ --platform=｛プラットフォーム｝ --arch=｛アーキテクチャ｝ --version （バージョン｝ ［その他のオプション ...］
+
+platform ･･･ all, linux, win32, darwin のいずれかを選択。
+            「--all」は全部入りのパッケージング。
+            「darwin」はmacのこと。複数選択はカンマ区切り。
+arch ･･･ all, ia32, x64 のいずれかを選択。
+version ･･･ Electronのバージョンを指定。(*electron -v*で確認)
+
+6.0.3
+
+electron-packager src/ ScreenshotsApp --platform=darwin --arch=x64 --version=^6.0.3
+
+electron-packager . --platform=darwin --arch=x64 --version 6.0.3
