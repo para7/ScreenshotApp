@@ -8,7 +8,6 @@ ScreenShotApp.screenShotsData = new Array();
 
 (function() {
 Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
-    console.log(x);
     ScreenShotApp.screenShotsData = x;
 });
 })()
