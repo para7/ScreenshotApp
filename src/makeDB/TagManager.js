@@ -9,6 +9,7 @@ TagDB.tags = new Array();
 
 TagDB.DeleteTags = function(checked) {
     return new Promise((resolve, reject) => {
+        //逐次で配列操作をすると遅い(と思う)ので、まとめてやる
         TagDB.tags
             = TagDB.tags
                   .map(value => {
@@ -21,7 +22,7 @@ TagDB.DeleteTags = function(checked) {
                       //見つからなかったらnullにする
                       return null;
                   })
-                  //null要素を消す
+                  //まとめてnull要素を消す
                   .filter(v => v);
         resolve(TagDB.tags);
     });

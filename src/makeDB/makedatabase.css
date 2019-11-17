@@ -41,3 +41,7 @@ textarea{
     box-sizing:border-box;
     height: 5rem;
 }
+
+div.red{
+    color: red;
+}

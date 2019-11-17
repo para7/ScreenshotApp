@@ -161,12 +161,25 @@ makeDB.filedrop = function(event) {
             let fileinfo = $("[data-name='fileinfo']");
             fileinfo.empty();
 
+            const pathlist = makeDB.screenshotsInfo.map(x => x.filepath);
+
             // ファイル数分ループ
             for (let i = 0; i < files.length; i++) {
                 // ファイル取得
                 let file = files[i];
 
+                //画像じゃなかったらさようなら
                 if (!file || file.type.indexOf('image/') < 0) {
+                    continue;
+                }
+
+                console.log(file.path);
+                console.log(makeDB.screenshotsInfo);
+
+                //登録済みファイルだったら弾く
+                if (pathlist.indexOf(file.path) >= 0) {
+                    const $txt = $("<div></div>").text("登録済みファイルです").attr("class", "red");
+                    $("[data-name='fileinfo']").append($txt);
                     continue;
                 }
 
