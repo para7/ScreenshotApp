@@ -10,3 +10,8 @@ div.red {
     position: relative;
     right: 5%;
 }
+
+.imgbt {
+    max-width: 90%;
+    max-height: 400px;
+}

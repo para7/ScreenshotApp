@@ -81,7 +81,8 @@ function searchEvent() {
             empty = false;
             let imgbt = document.createElement('img');
             imgbt.src = ScreenShotApp.screenShotsData[i].filepath;
-            imgbt.width = 500;
+            // imgbt.width = 500;
+            imgbt.className = "imgbt";
             imgbt.addEventListener('click', SetClipboard);
 
             images.insertAdjacentElement('beforeend', imgbt);
