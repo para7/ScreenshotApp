@@ -126,6 +126,7 @@ makeDB.eventStop = function(event) {
     event.originalEvent.dataTransfer.dropEffect = "link";
 };
 
+//スクリーンショットの追加
 makeDB.addScreenshot = function() {
     var div = $(event.target).parent().parent();
 
@@ -139,7 +140,7 @@ makeDB.addScreenshot = function() {
     makeDB.screenshotsInfo.push(output);
     // console.log(makeDB.screenshotsInfo);
 
-    Utils.SaveJson("ScreenshotsInfo.json", makeDB.screenshotsInfo);
+    Utils.SaveJson(ScreenShotApp.path.screenshotsJson, makeDB.screenshotsInfo);
 
     div.remove();
 };

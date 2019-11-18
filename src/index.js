@@ -58,41 +58,40 @@ function searchEvent() {
 
     let empty = true;
 
-    const te = ScreenShotApp.screenShotsData.filter(x => x.text.search(searchword) != -1);
-    console.log(te);
+    const result = ScreenShotApp.screenShotsData.filter(x => x.text.search(searchword) != -1);
 
-    for (let i = 0, l = ScreenShotApp.screenShotsData.length; i < l; ++i) {
-
-        //全文検索
-        let result = ScreenShotApp.screenShotsData[i].text.search(searchword) != -1;
-
-        //タグ検索
-        if (!result) {
-            for (let k = 0, lt = ScreenShotApp.screenShotsData[i].tags.length; k < lt; ++k) {
-
-                if (ScreenShotApp.screenShotsData[i].tags[k] == searchword) {
-                    result = true;
-                    break;
-                }
-            }
-        }
-
-        if (result) {
-            empty = false;
-            const div = $("<div></div>");
-            div.append($("<img>").attr("src", ScreenShotApp.screenShotsData[i].filepath).attr("class", "imgbt").on("click", SetClipboard));
-            div.append($("<button></button>").text("詳細").attr("class", "detail").on("click", showDetail));
-            images.append(div);
-        }
-    }
-
-    if (empty) {
+    //結果が空なら
+    if (result.length == 0) {
         images.prepend($("<div></div>").attr("class", "red").text("該当する画像がありませんでした"));
+        return;
     }
+
+    result.forEach(function(x) {
+        const div = $("<div></div>");
+        div.append($("<img>").attr("src", x.filepath).attr("class", "imgbt").on("click", SetClipboard));
+        div.append($("<button></button>").text("詳細").attr("data-number", x.number).attr("class", "detail").on("click", showDetail));
+        images.append(div);
+    });
 }
 
 function showDetail() {
-    console.log($(event.target)[0]);
+    const target = $(event.target);
+    const imgdata = ScreenShotApp.screenShotsData[target.attr("data-number")];
+    console.log(imgdata);
+
+    const filepath = $("<div></div>").text("ファイル:  " + imgdata.filepath);
+
+    const tags = $("<div></div>").text("タグ:  " + imgdata.tags.reduce((result, value) => result + ", " + value));
+
+    const text = $("<div></div>").text("テキスト:  " + imgdata.text);
+
+    target.parent().append($("<br>"));
+    target.parent().append(
+        $("<span></span>")
+            .attr("class", "detail")
+            .append(filepath)
+            .append(tags)
+            .append(text));
 }
 
 function onKeyPress(e) {
