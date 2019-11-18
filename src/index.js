@@ -61,7 +61,6 @@ function searchEvent() {
 
         //タグ検索
         if (!result) {
-
             for (let k = 0, lt = ScreenShotApp.screenShotsData[i].tags.length; k < lt; ++k) {
                 console.log(ScreenShotApp.screenShotsData[i].tags[k])
 
@@ -76,7 +75,7 @@ function searchEvent() {
             empty = false;
             const div = $("<div></div>");
             div.append($("<img>").attr("src", ScreenShotApp.screenShotsData[i].filepath).attr("class", "imgbt").on("click", SetClipboard));
-            div.append($("<button></button>").text("詳細").attr("class", "detail"));
+            div.append($("<button></button>").text("詳細").attr("class", "detail").on("click", showDetail));
             images.append(div);
         }
     }
@@ -84,6 +83,10 @@ function searchEvent() {
     if (empty) {
         images.insertAdjacentHTML("afterbegin", "<div class='red'>該当する画像がありませんでした<br></div>");
     }
+}
+
+function showDetail() {
+    console.log($(event.target)[0]);
 }
 
 function onKeyPress(e) {
