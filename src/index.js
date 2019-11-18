@@ -38,24 +38,27 @@ function searchEvent() {
 
     let input = document.getElementById("searchinput");
     let searchword = input.value;
-    let images = document.getElementById("images");
+    const images = $("#images");
 
     // エラーの挿入
     if (!searchword) {
-        images.insertAdjacentHTML("afterbegin", "<div class='red'>検索する文字を入力してください<br></div>");
+        images.prepend($("<div></div>").attr("class", "red").text("検索する文字を入力してください"));
+        // "<div class='red'>検索する文字を入力してください<br></div>"
         return;
     }
 
-    let children = images.children;
+    // let children = images.children;
     // イベントの解除
-    for (let i = 0, l = children.length; i < l; ++i) {
-        children[i].removeEventListener('click', SetClipboard);
-    }
+    // 要素消しちゃえば不要？
+    // for (let i = 0, l = children.length; i < l; ++i) {
+    //     children[i].removeEventListener('click', SetClipboard);
+    // }
 
     // 要素のリセット
-    while (images.firstChild) {
-        images.removeChild(images.firstChild);
-    }
+    // while (images.firstChild) {
+    //     images.removeChild(images.firstChild);
+    // }
+    images.empty();
 
     let empty = true;
     for (let i = 0, l = ScreenShotApp.screenShotsData.length; i < l; ++i) {
@@ -78,14 +81,10 @@ function searchEvent() {
 
         if (result) {
             empty = false;
-            let imgbt = document.createElement('img');
-            imgbt.src = ScreenShotApp.screenShotsData[i].filepath;
-            // imgbt.width = 500;
-            imgbt.className = "imgbt";
-            imgbt.addEventListener('click', SetClipboard);
-
-            images.insertAdjacentElement('beforeend', imgbt);
-            images.insertAdjacentHTML('beforeend', '<br>');
+            const div = $("<div></div>");
+            div.append($("<img>").attr("src", ScreenShotApp.screenShotsData[i].filepath).attr("class", "imgbt").on("click", SetClipboard));
+            div.append($("<button></button>").text("詳細").attr("class", "detail"));
+            images.append(div);
         }
     }
 

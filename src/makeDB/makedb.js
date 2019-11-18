@@ -178,8 +178,8 @@ makeDB.filedrop = function(event) {
 
                 //登録済みファイルだったら弾く
                 if (pathlist.indexOf(file.path) >= 0) {
-                    const $txt = $("<div></div>").text("登録済みファイルです").attr("class", "red");
-                    $("[data-name='fileinfo']").append($txt);
+                    const txt = $("<div></div>").text("登録済みファイルです").attr("class", "red");
+                    $("[data-name='fileinfo']").append(txt);
                     continue;
                 }
 
