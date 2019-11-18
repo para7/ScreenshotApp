@@ -9,6 +9,13 @@ ScreenShotApp.screenShotsData = new Array();
 (function() {
 Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
     ScreenShotApp.screenShotsData = x;
+
+    //要素にインデックスを追加（ごり押し）
+    const length = ScreenShotApp.screenShotsData.length;
+    for (let i = 0; i < length; i++) {
+        //numberプロパティが増える
+        ScreenShotApp.screenShotsData[i].number = i;
+    }
 });
 })()
 
@@ -16,6 +23,7 @@ Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
 function SetClipboard() {
 
     let filepath = decodeURI(event.target.src);
+    //http://をカット
     filepath = filepath.substr(7);
     console.log(filepath);
 
@@ -29,15 +37,10 @@ function SetClipboard() {
     splash('コピーしました');
 }
 
-// 検索
-let button = document.getElementById("search");
-
-// イベントリスナーへの登録
-
 function searchEvent() {
 
     let input = document.getElementById("searchinput");
-    let searchword = input.value;
+    const searchword = input.value;
     const images = $("#images");
 
     // エラーの挿入
@@ -54,6 +57,10 @@ function searchEvent() {
     images.empty();
 
     let empty = true;
+
+    const te = ScreenShotApp.screenShotsData.filter(x => x.text.search(searchword) != -1);
+    console.log(te);
+
     for (let i = 0, l = ScreenShotApp.screenShotsData.length; i < l; ++i) {
 
         //全文検索
@@ -62,7 +69,6 @@ function searchEvent() {
         //タグ検索
         if (!result) {
             for (let k = 0, lt = ScreenShotApp.screenShotsData[i].tags.length; k < lt; ++k) {
-                console.log(ScreenShotApp.screenShotsData[i].tags[k])
 
                 if (ScreenShotApp.screenShotsData[i].tags[k] == searchword) {
                     result = true;
@@ -81,7 +87,7 @@ function searchEvent() {
     }
 
     if (empty) {
-        images.insertAdjacentHTML("afterbegin", "<div class='red'>該当する画像がありませんでした<br></div>");
+        images.prepend($("<div></div>").attr("class", "red").text("該当する画像がありませんでした"));
     }
 }
 
@@ -95,8 +101,8 @@ function onKeyPress(e) {
     }
 }
 
-// 検索動作
-button.addEventListener('click', searchEvent);
+// 検索ボタン
+document.getElementById("search").addEventListener('click', searchEvent);
 document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
 
     // ShotJson.setdata();
