@@ -47,13 +47,6 @@ function searchEvent() {
         return;
     }
 
-    // let children = images.children;
-    // イベントの解除
-    // 要素消しちゃえば不要？
-    // for (let i = 0, l = children.length; i < l; ++i) {
-    //     children[i].removeEventListener('click', SetClipboard);
-    // }
-
     // 要素のリセット
     // while (images.firstChild) {
     //     images.removeChild(images.firstChild);
