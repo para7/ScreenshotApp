@@ -112,10 +112,43 @@ scEditor.editScreenshot = function() {
     var div = $(event.target).parent().parent();
 
     //データ取得
-    var output = {};
-    output.text = div.children('textarea').val();
-    output.tags = makeDB.GetCheckedTag();
-    output.filepath = div.children('img').attr('src');
+    var data = {};
+    data.text = div.children('textarea').val();
+    data.tags = makeDB.GetCheckedTag();
+    data.filepath = div.children('img').attr('src');
+
+    //ユニークになるファイルパスを使ってインデックスを検索
+    const index = scEditor.screenshotsInfo.findIndex((x) => x.filepath === data.filepath);
+    //なぜかなかったらエラー
+    if (index === -1) {
+        console.log("outofrange error.");
+        return;
+    }
+
+    //データを更新
+    scEditor.screenshotsInfo[index].text = data.text;
+    scEditor.screenshotsInfo[index].tags = data.tags;
+    console.log(scEditor.screenshotsInfo);
+
+    //JSONと同期
+    //HACK: 上の代入が遅れた場合、非同期の保存バグを起こす可能性あり。
+    Utils.SaveJson(ScreenShotApp.path.screenshotsJson, scEditor.screenshotsInfo);
+
+    div.remove();
+};
+
+scEditor.deleteScreenshot = function() {
+    var div = $(event.target).parent().parent();
+
+    const filepath = div.children('img').attr('src');
+
+    //ユニークになるファイルパスを使ってインデックスを検索
+    const index = scEditor.screenshotsInfo.findIndex((x) => x.filepath === filepath);
+    //なぜかなかったらエラー
+    if (index === -1) {
+        console.log("outofrange error.");
+        return;
+    }
 };
 
 /* スクショデータ操作表示関数 */
@@ -134,6 +167,7 @@ scEditor.showScreenshotEdit = function(number) {
               .attr('class', 'editor')
               .text(scdata.text);
 
+    //centerをかけたいので、ボタン2個divに突っ込む
     const btdiv
         = $("<div></div>").attr("class", "center");
 
@@ -142,25 +176,18 @@ scEditor.showScreenshotEdit = function(number) {
               .attr('href', '#')
               .attr('class', 'btn-flat-border')
               .text("保存")
-              .on("click", () => console.log("保存"));
+              .on("click", scEditor.editScreenshot);
 
     const deletebt
         = $('<a></a>')
               .attr('href', '#')
               .attr('class', 'btn-flat-border')
               .text("削除")
-              .on("click", () => console.log("削除"));
+              .on("click", scEditor.deleteScreenshot);
 
     btdiv.append(savebt).append(deletebt);
 
     makeDB.setTagCheck(scdata.tags);
-
-    // //タグ情報にチェックを入れる
-    // const tags = scdata.tags;
-    // console.log($('input[name=tag]'));
-    // console.log($('input[name=tag]').get());
-    // console.log($('input[name=tag]').get()[0]);
-    // console.log($('input[name=tag]').get().filter(x => scdata.tags.includes(x.getAttribute("value"))));
 
     $("[data-name='fileinfo']").append(image).append(textarea).append(btdiv);
 };
