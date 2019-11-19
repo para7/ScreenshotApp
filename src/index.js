@@ -58,8 +58,11 @@ ScreenShotApp.searchEvent = function() {
 
     let empty = true;
 
+    const searchlogic = function(txt) { return (txt.text.search(searchword) != -1) || (txt.tags.includes(searchword)); }
+
     //検索ロジック
-    const result = ScreenShotApp.screenShotsData.filter(function(x) { return (x.text.search(searchword) != -1) || (x.tags.includes(searchword)); });
+    const result
+        = ScreenShotApp.screenShotsData.filter(searchlogic);
 
     //結果が空なら
     if (result.length == 0) {

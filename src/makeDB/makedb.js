@@ -79,11 +79,17 @@ makeDB.addTag = function() {
 
         input = document.getElementById('dbinput');
 
-        let text = input.value;
+        const text = input.value;
 
         if (text === '') {
             return;
         }
+
+        if (text.indexOf(" ") !== -1) {
+            $("#tagerror").text("タグに空白は含めないでください");
+            return;
+        };
+        $("#tagerror").text("");
 
         TagDB.tags.push(text);
 
