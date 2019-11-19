@@ -58,7 +58,7 @@ function searchEvent() {
 
     let empty = true;
 
-    const result = ScreenShotApp.screenShotsData.filter(x => x.text.search(searchword) != -1);
+    const result = ScreenShotApp.screenShotsData.filter(function(x) { return (x.text.search(searchword) != -1) || (x.tags.includes(searchword)); });
 
     //結果が空なら
     if (result.length == 0) {
@@ -74,6 +74,7 @@ function searchEvent() {
     });
 }
 
+//詳細ボタンの動作
 function showDetail() {
     const target = $(event.target);
     const imgdata = ScreenShotApp.screenShotsData[target.attr("data-number")];
@@ -86,14 +87,18 @@ function showDetail() {
     const text = $("<div></div>").text("テキスト:  " + imgdata.text);
 
     target.parent().append($("<br>"));
-    target.parent().append(
-        $("<span></span>")
-            .attr("class", "detail")
-            .append(filepath)
-            .append(tags)
-            .append(text));
+    target.parent()
+        .append($("<div></div>")
+                    .attr("class", "detail")
+                    .append(filepath)
+                    .append(tags)
+                    .append(text))
+        .append($("<a></a>").attr("href", "./makeDB/mkdb.html?edit=" + imgdata.number).text("編集"))
+        .append($("<br>"))
+        .append($("<br>"));
 }
 
+//検索をエンターキーで可能にする
 function onKeyPress(e) {
     if (e.keyCode == 13) {
         searchEvent();
@@ -103,7 +108,3 @@ function onKeyPress(e) {
 // 検索ボタン
 document.getElementById("search").addEventListener('click', searchEvent);
 document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
-
-    // ShotJson.setdata();
-    // ShotJson.readjson();
-    // ShotJson.savejson();
