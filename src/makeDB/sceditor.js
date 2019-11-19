@@ -22,9 +22,8 @@ scEditor.init = function() {
         $("#grideditor").on("dragover", scEditor.eventStop).on("drop", scEditor.filedrop);
 
         //編集データ飛んできてたら
-        const get = Utils.getUrlVars();
-        if (("edit" in get)) {
-            scEditor.showScreenshotEdit(get.edit);
+        if (("edit" in Utils.getUrlVars())) {
+            scEditor.showScreenshotEdit(Utils.getUrlVars().edit);
         }
     });
 };
@@ -154,8 +153,14 @@ scEditor.showScreenshotEdit = function(number) {
 
     btdiv.append(savebt).append(deletebt);
 
-    //タグ情報にチェックを入れる
-    const tags = scdata.tags;
+    makeDB.setTagCheck(scdata.tags);
+
+    // //タグ情報にチェックを入れる
+    // const tags = scdata.tags;
+    // console.log($('input[name=tag]'));
+    // console.log($('input[name=tag]').get());
+    // console.log($('input[name=tag]').get()[0]);
+    // console.log($('input[name=tag]').get().filter(x => scdata.tags.includes(x.getAttribute("value"))));
 
     $("[data-name='fileinfo']").append(image).append(textarea).append(btdiv);
 };

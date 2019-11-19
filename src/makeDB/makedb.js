@@ -11,51 +11,61 @@ makeDB.GetCheckedTag = function() {
     return $.makeArray(checked);
 };
 
-makeDB.UpdateDisplay = function(tags) {
-    const dbtags = document.getElementById('dbtags');
-    const children = dbtags.children;
+makeDB.setTagCheck = function(tags) {
+    console.log($('input[name=tag]'));
+    console.log($('input[name=tag]').get());
+    console.log($('input[name=tag]').get()[0]);
+    console.log($('input[name=tag]').get().filter(x => tags.includes(x.getAttribute("value"))));
 
-    // イベントの解除
-    for (let i = 0, l = children.length; i < l; ++i) {
-        children[i].removeEventListener('click', TagDB.DeleteTag);
-    }
+    $($('input[name=tag]').get().filter(x => tags.includes(x.getAttribute("value")))).attr("checked", "true");
+}
 
-    // 要素のリセット
-    while (dbtags.firstChild) {
-        dbtags.removeChild(dbtags.firstChild);
-    }
+                     makeDB.UpdateDisplay
+    = function(tags) {
+          const dbtags = document.getElementById('dbtags');
+          const children = dbtags.children;
 
-    let form = document.createElement('form');
-    form.name = "taglist";
-    dbtags.appendChild(form);
+          // イベントの解除
+          for (let i = 0, l = children.length; i < l; ++i) {
+              children[i].removeEventListener('click', TagDB.DeleteTag);
+          }
 
-    // console.log(TagDB.Tags);
+          // 要素のリセット
+          while (dbtags.firstChild) {
+              dbtags.removeChild(dbtags.firstChild);
+          }
 
-    //タグ一覧の更新
-    for (let k = 0, lt = tags.length; k < lt; ++k) {
-        //全体のdiv
-        let div = document.createElement('div');
-        div.className = 'tags';
+          let form = document.createElement('form');
+          form.name = "taglist";
+          dbtags.appendChild(form);
 
-        //文字
-        let span = document.createElement('span');
-        const text = document.createTextNode(tags[k]);
-        span.appendChild(text);
+          // console.log(TagDB.Tags);
 
-        //チェックボックス
-        let cbox = document.createElement('input');
-        cbox.type = 'checkbox';
-        cbox.value = tags[k];
-        cbox.name = 'tag';
+          //タグ一覧の更新
+          for (let k = 0, lt = tags.length; k < lt; ++k) {
+              //全体のdiv
+              let div = document.createElement('div');
+              div.className = 'tags';
 
-        //チェックボックスを追加
-        div.appendChild(cbox);
-        //タグの中身を追加
-        div.appendChild(span);
+              //文字
+              let span = document.createElement('span');
+              const text = document.createTextNode(tags[k]);
+              span.appendChild(text);
 
-        form.appendChild(div);
-    }
-};
+              //チェックボックス
+              let cbox = document.createElement('input');
+              cbox.type = 'checkbox';
+              cbox.value = tags[k];
+              cbox.name = 'tag';
+
+              //チェックボックスを追加
+              div.appendChild(cbox);
+              //タグの中身を追加
+              div.appendChild(span);
+
+              form.appendChild(div);
+          }
+      };
 
 makeDB.tagDelete = function() {
     const checked = makeDB.GetCheckedTag();

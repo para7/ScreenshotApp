@@ -37,6 +37,7 @@ function SetClipboard() {
     splash('コピーしました');
 }
 
+//検索
 function searchEvent() {
 
     let input = document.getElementById("searchinput");
@@ -58,6 +59,7 @@ function searchEvent() {
 
     let empty = true;
 
+    //検索ロジック
     const result = ScreenShotApp.screenShotsData.filter(function(x) { return (x.text.search(searchword) != -1) || (x.tags.includes(searchword)); });
 
     //結果が空なら
@@ -78,7 +80,6 @@ function searchEvent() {
 function showDetail() {
     const target = $(event.target);
     const imgdata = ScreenShotApp.screenShotsData[target.attr("data-number")];
-    console.log(imgdata);
 
     const filepath = $("<div></div>").text("ファイル:  " + imgdata.filepath);
 
