@@ -9,7 +9,7 @@ TagDB.tags = new Array();
 
 TagDB.DeleteTags = function(checked) {
     return new Promise((resolve, reject) => {
-        //逐次で配列操作をすると遅い(と思う)ので、まとめてやる
+        //逐次で配列の削除操作をすると遅いはずなので、まとめてやる
         TagDB.tags
             = TagDB.tags
                   .map(value => {

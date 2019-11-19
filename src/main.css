@@ -23,7 +23,7 @@ button.detail {
     max-width: 3.2rem;
 }
 
-span.detail{
+div.detail{
     text-align: left;
     margin: 0.1rem 0rem 0.1rem 2rem;
 }

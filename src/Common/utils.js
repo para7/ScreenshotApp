@@ -68,6 +68,7 @@ if (typeof Utils === 'undefined') {
     var Utils = {};
 }
 
+//https://qiita.com/tnakagawa/items/68260254045dce44c913
 Utils.SaveJson = function(path, obj) {
     return new Promise((resolve, reject) => {
         const fs = require('fs');
@@ -97,3 +98,19 @@ Utils.LoadJson = function(path) {
         });
     });
 };
+
+// https://qiita.com/Evolutor_web/items/c9b940f752883676b35d
+Utils.getUrlVars = function() {
+    var vars = {};
+    var param = location.search.substring(1).split('&');
+    for (var i = 0; i < param.length; i++) {
+        var keySearch = param[i].search(/=/);
+        var key = '';
+        if (keySearch != -1)
+            key = param[i].slice(0, keySearch);
+        var val = param[i].slice(param[i].indexOf('=', 0) + 1);
+        if (key != '')
+            vars[key] = decodeURI(val);
+    }
+    return vars;
+}

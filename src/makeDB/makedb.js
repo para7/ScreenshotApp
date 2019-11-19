@@ -8,7 +8,7 @@ makeDB.screenshotsInfo = "";
 
 // https://qiita.com/ginpei/items/9659c5bf4c82f87514de#%E5%85%83%E3%83%8D%E3%82%BF
 makeDB.GetCheckedTag = function() {
-    var checked = $('[name=tag]:checked').map(function(index, el) { return $(this).val(); });
+    var checked = $('input[name=tag]:checked').map(function(index, el) { return $(this).val(); });
 
     return $.makeArray(checked);
 };
@@ -94,8 +94,6 @@ makeDB.addTag = function() {
 };
 $('#dbadd').on('click', makeDB.addTag);
 
-//https://qiita.com/tnakagawa/items/68260254045dce44c913
-
 // 初期処理
 makeDB.init = function() {
     TagDB.LoadTag()
@@ -107,15 +105,25 @@ makeDB.init = function() {
     Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
         makeDB.screenshotsInfo = x;
 
+        $("#grideditor").prepend($("<div></div>").text("ここにファイルをドロップして下さい。"));
+
         var droparea = $("#droparea");
-        droparea.text("ここにファイルをドロップして下さい。");
+        droparea.text("");
         const div = $("<div></div>").attr('data-name', "fileinfo");
         droparea.append(div);
-    });
 
-    // ファイルドロップイベント設定
-    $("#grideditor").on("dragover", makeDB.eventStop).on("drop", makeDB.filedrop);
+        // ファイルドロップイベント設定
+        $("#grideditor").on("dragover", makeDB.eventStop).on("drop", makeDB.filedrop);
+
+        //編集データ飛んできてたら
+        const get = Utils.getUrlVars();
+        if (("edit" in get)) {
+            makeDB.showScreenshotEdit(get.edit);
+        }
+    });
 };
+
+/* ドラッグドロップ処理関数 */
 
 // ファイルがドラッグされた場合
 makeDB.eventStop = function(event) {
@@ -124,25 +132,6 @@ makeDB.eventStop = function(event) {
     event.preventDefault();
     // 操作をリンクに変更
     event.originalEvent.dataTransfer.dropEffect = "link";
-};
-
-//スクリーンショットの追加
-makeDB.addScreenshot = function() {
-    var div = $(event.target).parent().parent();
-
-    var output = {};
-    output.text = div.children('textarea').val();
-    output.tags = makeDB.GetCheckedTag();
-    output.filepath = div.children('img').attr('src');
-
-    // console.log(output);
-    // console.log(makeDB.screenshotsInfo);
-    makeDB.screenshotsInfo.push(output);
-    // console.log(makeDB.screenshotsInfo);
-
-    Utils.SaveJson(ScreenShotApp.path.screenshotsJson, makeDB.screenshotsInfo);
-
-    div.remove();
 };
 
 // ファイルがドロップされた場合
@@ -154,7 +143,6 @@ makeDB.filedrop = function(event) {
 
         // ファイル存在チェック
         if (event.originalEvent.dataTransfer.files) {
-
             // ファイル取得
             let files = event.originalEvent.dataTransfer.files;
 
@@ -174,46 +162,125 @@ makeDB.filedrop = function(event) {
                     continue;
                 }
 
-                console.log(file.path);
-                console.log(makeDB.screenshotsInfo);
+                // console.log(file.path);
+                // console.log(makeDB.screenshotsInfo);
 
                 //登録済みファイルだったら弾く
+                //TODO: Editモードにする
                 if (pathlist.indexOf(file.path) >= 0) {
                     const txt = $("<div></div>").text("登録済みファイルです").attr("class", "red");
                     $("[data-name='fileinfo']").append(txt);
                     continue;
                 }
 
-                let image
-                    = $("<img>")
-                          .attr('src', file.path)
-                          .attr('class', "editor");
-
-                let textarea
-                    = $('<textarea></textarea>')
-                          .attr('class', 'editor');
-
-                let div
-                    = $("<div></div>").attr("class", "center");
-
-                let button
-                    = $('<a></a>')
-                          .attr('href', '#')
-                          .attr('class', 'btn-flat-border')
-                          .text("登録")
-                          .on("click", makeDB.addScreenshot);
-
-                div.append(button);
-
-                // <a href="#" id="dbadd" class="btn-flat-border">追加</a>
-
-                $("[data-name='fileinfo']").append(image).append(textarea).append(div);
+                makeDB.showScreenshotRegister(file.path);
             }
         }
     } catch (e) {
         // エラーの場合
         alert(e.message);
     }
-}
+};
+
+/* スクショデータ操作表示関数 */
+
+//スクリーンショットの追加
+makeDB.addScreenshot = function() {
+    var div = $(event.target).parent().parent();
+
+    //データ取得
+    var output = {};
+    output.text = div.children('textarea').val();
+    output.tags = makeDB.GetCheckedTag();
+    output.filepath = div.children('img').attr('src');
+
+    //配列に追加
+    makeDB.screenshotsInfo.push(output);
+
+    //JSONと同期
+    Utils.SaveJson(ScreenShotApp.path.screenshotsJson, makeDB.screenshotsInfo);
+
+    div.remove();
+};
+
+makeDB.editScreenshot = function() {
+    var div = $(event.target).parent().parent();
+
+    //データ取得
+    var output = {};
+    output.text = div.children('textarea').val();
+    output.tags = makeDB.GetCheckedTag();
+    output.filepath = div.children('img').attr('src');
+};
+
+/* スクショデータ操作表示関数 */
+
+//スクショ情報編集
+makeDB.showScreenshotEdit = function(number) {
+    const scdata = makeDB.screenshotsInfo[number];
+
+    const image
+        = $("<img>")
+              .attr('src', scdata.filepath)
+              .attr('class', "editor");
+
+    const textarea
+        = $('<textarea></textarea>')
+              .attr('class', 'editor')
+              .text(scdata.text);
+
+    const btdiv
+        = $("<div></div>").attr("class", "center");
+
+    const savebt
+        = $('<a></a>')
+              .attr('href', '#')
+              .attr('class', 'btn-flat-border')
+              .text("保存")
+              .on("click", () => console.log("保存"));
+
+    const deletebt
+        = $('<a></a>')
+              .attr('href', '#')
+              .attr('class', 'btn-flat-border')
+              .text("削除")
+              .on("click", () => console.log("削除"));
+
+    btdiv.append(savebt).append(deletebt);
+
+    //タグ情報にチェックを入れる
+    const tags = scdata.tags;
+
+    $("[data-name='fileinfo']").append(image).append(textarea).append(btdiv);
+};
+
+//スクショ新規登録
+makeDB.showScreenshotRegister = function(path) {
+    let image
+        = $("<img>")
+              .attr('src', path)
+              .attr('class', "editor");
+
+    let textarea
+        = $('<textarea></textarea>')
+              .attr('class', 'editor');
+
+    let div
+        = $("<div></div>").attr("class", "center");
+
+    let button
+        = $('<a></a>')
+              .attr('href', '#')
+              .attr('class', 'btn-flat-border')
+              .text("登録")
+              .on("click", makeDB.addScreenshot);
+
+    div.append(button);
+
+    // <a href="#" id="dbadd" class="btn-flat-border">追加</a>
+
+    $("[data-name='fileinfo']").append(image).append(textarea).append(div);
+};
+
 // 初期処理登録
 $(makeDB.init);
