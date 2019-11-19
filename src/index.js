@@ -9,6 +9,7 @@ ScreenShotApp.screenShotsData = new Array();
 (function() {
 Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
     ScreenShotApp.screenShotsData = x;
+    ScreenShotApp.screenShotsData.forEach
 
     //要素にインデックスを追加（ごり押し）
     const length = ScreenShotApp.screenShotsData.length;
@@ -82,8 +83,8 @@ function showDetail() {
     const imgdata = ScreenShotApp.screenShotsData[target.attr("data-number")];
 
     const filepath = $("<div></div>").text("ファイル:  " + imgdata.filepath);
-
-    const tags = $("<div></div>").text("タグ:  " + imgdata.tags.reduce((result, value) => result + ", " + value));
+    console.log(imgdata)
+    const tags = $("<div></div>").text("タグ:  " + imgdata.tags.reduce((result, value) => result + ", " + value, ""));
 
     const text = $("<div></div>").text("テキスト:  " + imgdata.text);
 

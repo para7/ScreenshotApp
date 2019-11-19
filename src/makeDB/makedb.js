@@ -82,7 +82,6 @@ makeDB.addTag = function() {
         let text = input.value;
 
         if (text === '') {
-            console.log('empty');
             return;
         }
 

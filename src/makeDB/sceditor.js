@@ -99,6 +99,10 @@ scEditor.addScreenshot = function() {
     output.tags = makeDB.GetCheckedTag();
     output.filepath = div.children('img').attr('src');
 
+    if (output.text == "") {
+        return;
+    }
+
     //配列に追加
     scEditor.screenshotsInfo.push(output);
 
