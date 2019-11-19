@@ -37,14 +37,26 @@ ScreenShotApp.SetClipboard = function() {
     splash('コピーしました');
 };
 
+//検索ロジック
+// ScreenShotApp.searchlogic = function(txt) {
+//     //テキスト検索
+//     let ret = false;
+
+//     searchwords.some(searchword => txt.text.search(searchword) != -1);
+
+//     //タグ
+//     ret = ret || searchwords.some(searchword => txt.tags.includes(searchword));
+//     return ret;
+// };
+
 //検索
 ScreenShotApp.searchEvent = function() {
     let input = document.getElementById("searchinput");
-    const searchword = input.value;
+    const searchwords = input.value.split(/[ 　]/).filter(v => v);
     const images = $("#images");
 
     // エラーの挿入
-    if (!searchword) {
+    if (searchwords.length === 0) {
         images.prepend($("<div></div>").attr("class", "red").text("検索する文字を入力してください"));
         // "<div class='red'>検索する文字を入力してください<br></div>"
         return;
@@ -58,11 +70,18 @@ ScreenShotApp.searchEvent = function() {
 
     let empty = true;
 
-    const searchlogic = function(txt) { return (txt.text.search(searchword) != -1) || (txt.tags.includes(searchword)); }
-
     //検索ロジック
-    const result
-        = ScreenShotApp.screenShotsData.filter(searchlogic);
+    const searchlogic = function(txt) {
+        //textに部分一致、またはtagsに完全一致で含まれている
+        //すべてのsearchwordに対して、それが正しい
+        return searchwords.every(searchword => {
+            const textresult = txt.text.search(searchword) != -1;
+            const tagresult = txt.tags.includes(searchword);
+            return textresult || tagresult;
+        });
+    };
+
+    const result = ScreenShotApp.screenShotsData.filter(searchlogic);
 
     //結果が空なら
     if (result.length == 0) {
