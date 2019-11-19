@@ -21,8 +21,7 @@ Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
 })()
 
 // 画像クリック時の処理
-function SetClipboard() {
-
+ScreenShotApp.SetClipboard = function() {
     let filepath = decodeURI(event.target.src);
     //http://をカット
     filepath = filepath.substr(7);
@@ -36,11 +35,10 @@ function SetClipboard() {
     clipboard.writeImage(image);
 
     splash('コピーしました');
-}
+};
 
 //検索
-function searchEvent() {
-
+ScreenShotApp.searchEvent = function() {
     let input = document.getElementById("searchinput");
     const searchword = input.value;
     const images = $("#images");
@@ -71,19 +69,18 @@ function searchEvent() {
 
     result.forEach(function(x) {
         const div = $("<div></div>");
-        div.append($("<img>").attr("src", x.filepath).attr("class", "imgbt").on("click", SetClipboard));
-        div.append($("<button></button>").text("詳細").attr("data-number", x.number).attr("class", "detail").on("click", showDetail));
+        div.append($("<img>").attr("src", x.filepath).attr("class", "imgbt").on("click", ScreenShotApp.SetClipboard));
+        div.append($("<button></button>").text("詳細").attr("data-number", x.number).attr("class", "detail").on("click", ScreenShotApp.showDetail));
         images.append(div);
     });
-}
+};
 
 //詳細ボタンの動作
-function showDetail() {
+ScreenShotApp.showDetail = function() {
     const target = $(event.target);
     const imgdata = ScreenShotApp.screenShotsData[target.attr("data-number")];
 
     const filepath = $("<div></div>").text("ファイル:  " + imgdata.filepath);
-    console.log(imgdata)
     const tags = $("<div></div>").text("タグ:  " + imgdata.tags.reduce((result, value) => result + ", " + value, ""));
 
     const text = $("<div></div>").text("テキスト:  " + imgdata.text);
@@ -98,15 +95,15 @@ function showDetail() {
         .append($("<a></a>").attr("href", "./makeDB/mkdb.html?edit=" + imgdata.number).text("編集"))
         .append($("<br>"))
         .append($("<br>"));
-}
+};
 
 //検索をエンターキーで可能にする
-function onKeyPress(e) {
+ScreenShotApp.onKeyPress = function(e) {
     if (e.keyCode == 13) {
-        searchEvent();
+        ScreenShotApp.searchEvent();
     }
-}
+};
 
 // 検索ボタン
-document.getElementById("search").addEventListener('click', searchEvent);
-document.getElementById("searchinput").addEventListener('keypress', onKeyPress)
+document.getElementById("search").addEventListener('click', ScreenShotApp.searchEvent);
+document.getElementById("searchinput").addEventListener('keypress', ScreenShotApp.onKeyPress)
