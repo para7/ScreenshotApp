@@ -149,6 +149,11 @@ scEditor.deleteScreenshot = function() {
         console.log("outofrange error.");
         return;
     }
+    scEditor.screenshotsInfo.splice(index, 1);
+
+    Utils.SaveJson(ScreenShotApp.path.screenshotsJson, scEditor.screenshotsInfo);
+
+    div.remove();
 };
 
 /* スクショデータ操作表示関数 */
