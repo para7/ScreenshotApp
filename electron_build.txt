@@ -8,4 +8,4 @@ version ･･･ Electronのバージョンを指定。(*electron -v*で確認)
 
 
 
-electron-packager src/ ScreenshotsApp --platform=darwin --arch=x64 --overwrite
+electron-packager src/ ScreenshotsApp --platform=darwin,win32 --arch=all --overwrite

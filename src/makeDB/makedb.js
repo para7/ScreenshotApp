@@ -85,7 +85,8 @@ makeDB.addTag = function() {
             return;
         }
 
-        if (text.indexOf(" ") !== -1) {
+        //入力値チェック
+        if (text.indexOf(" ") !== -1 || text.indexOf("　") !== -1) {
             $("#tagerror").text("タグに空白は含めないでください");
             return;
         };
