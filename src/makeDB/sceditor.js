@@ -8,23 +8,25 @@ scEditor.screenshotsInfo = "";
 
 // 初期処理
 scEditor.init = function() {
-    Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
-        scEditor.screenshotsInfo = x;
+    return new Promise((resolve, reject) => {
+        Utils.LoadJson(ScreenShotApp.path.screenshotsJson).then(x => {
+            scEditor.screenshotsInfo = x;
 
-        $("#grideditor").prepend($("<div></div>").text("ここにファイルをドロップして下さい。"));
+            $("#grideditor").prepend($("<div></div>").text("ここにファイルをドロップして下さい。"));
 
-        var droparea = $("#droparea");
-        droparea.text("");
-        const div = $("<div></div>").attr('data-name', "fileinfo");
-        droparea.append(div);
+            var droparea = $("#droparea");
+            droparea.text("");
+            const div = $("<div></div>").attr('data-name', "fileinfo");
+            droparea.append(div);
 
-        // ファイルドロップイベント設定
-        $("#grideditor").on("dragover", scEditor.eventStop).on("drop", scEditor.filedrop);
+            // ファイルドロップイベント設定
+            $("#grideditor").on("dragover", scEditor.eventStop).on("drop", scEditor.filedrop);
 
-        //編集データ飛んできてたら
-        if (("edit" in Utils.getUrlVars())) {
-            scEditor.showScreenshotEdit(Utils.getUrlVars().edit);
-        }
+            //編集データ飛んできてたら
+            if (("edit" in Utils.getUrlVars())) {
+                scEditor.showScreenshotEdit(Utils.getUrlVars().edit);
+            }
+        });
     });
 };
 
@@ -229,4 +231,10 @@ scEditor.showScreenshotRegister = function(path) {
     $("[data-name='fileinfo']").append(image).append(textarea).append(div);
 };
 
-$(scEditor.init);
+// $(scEditor.init);
+
+$(function() {
+    makeDB.init()
+        .then(makeDB.UpdateDisplay)
+        .then(scEditor.init);
+});
