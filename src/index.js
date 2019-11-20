@@ -103,7 +103,12 @@ ScreenShotApp.showDetail = function() {
     const imgdata = ScreenShotApp.screenShotsData[target.attr("data-number")];
 
     const filepath = $("<div></div>").text("ファイル:  " + imgdata.filepath);
-    const tags = $("<div></div>").text("タグ:  " + imgdata.tags.reduce((result, value) => result + ", " + value, ""));
+    const tags = $("<div></div>").text("タグ:  " + imgdata.tags.reduce((result, value) => {
+        let comma = ", ";
+        if (result === "") {
+            comma = "";
+        }
+        return result + comma + value; }, ""));
 
     const text = $("<div></div>").text("テキスト:  " + imgdata.text);
 

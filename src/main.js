@@ -41,19 +41,15 @@ app.on('ready', () => {
 // Menu
 let menuTemplate = [ {
     label : "Menu",
-    submenu : [ {
-                   label : "AddScreenshot",
-                   click : () => {
-                       mainWindow.loadURL('file://' + __dirname + '/mkdb.html')
-                   }
-               },
+    submenu : [
         {
             label : "Quit",
             accelerator : process.platform === "darwin" ? "Command+Q" : "Ctrl+Q",
             click() {
                 app.quit();
             }
-        } ]
+        }
+    ]
 } ];
 
 if (process.platform == 'darwin') {
